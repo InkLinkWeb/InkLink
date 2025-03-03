@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center h-screen">
+  <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">Create Your Account</h2>
+    <form id="signup-form">
+      <!-- Email Input -->
+      <div class="mb-4">
+        <label for="email" class="block text-gray-700">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="you@example.com"
+          class="mt-1 block w-full border-gray-300 rounded px-3 py-2"
+          required
+        />
+      </div>
+      <!-- Password Input -->
+      <div class="mb-4 relative">
+        <label for="password" class="block text-gray-700">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="********"
+          class="mt-1 block w-full border-gray-300 rounded px-3 py-2"
+          required
+        />
+        <p id="password-error" class="text-red-500 text-sm mt-1 hidden">
+          Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.
+        </p>
+      </div>
+      <!-- Confirm Password Input -->
+      <div class="mb-4 relative">
+        <label for="confirm-password" class="block text-gray-700">Confirm Password</label>
+        <input
+          type="password"
+          id="confirm-password"
+          name="confirm-password"
+          placeholder="********"
+          class="mt-1 block w-full border-gray-300 rounded px-3 py-2 pr-10"
+          required
+        />
+        <!-- Green check icon (hidden by default) -->
+        <span id="password-match-icon" class="absolute right-3 top-9 hidden">
+          <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+               xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 13l4 4L19 7"></path>
+          </svg>
+        </span>
+        <p id="confirm-password-error" class="text-red-500 text-sm mt-1 hidden">
+          Passwords do not match.
+        </p>
+      </div>
+      <!-- Terms and Conditions -->
+      <div class="mb-4 flex items-center">
+        <input type="checkbox" id="terms" name="terms" class="mr-2" required>
+        <label for="terms" class="text-gray-700 text-sm">
+          I agree to the <a href="#" class="text-blue-500">Terms and Conditions</a>
+        </label>
+      </div>
+      <!-- Sign Up Button -->
+      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+        Sign Up
+      </button>
+    </form>
+  </div>
+
+  <script>
+    // Regex to enforce a strong password:
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const passwordError = document.getElementById('password-error');
+    const confirmPasswordError = document.getElementById('confirm-password-error');
+    const passwordMatchIcon = document.getElementById('password-match-icon');
+
+    function checkPasswordStrength() {
+      // Check if the password meets the strong password criteria
+      if (!strongPasswordRegex.test(passwordInput.value)) {
+        passwordError.classList.remove('hidden');
+        return false;
+      } else {
+        passwordError.classList.add('hidden');
+        return true;
+      }
+    }
+
+    function checkPasswordsMatch() {
+      // Check if the password and confirm password fields match
+      if (passwordInput.value !== confirmPasswordInput.value) {
+        confirmPasswordError.classList.remove('hidden');
+        passwordMatchIcon.classList.add('hidden');
+        return false;
+      } else {
+        confirmPasswordError.classList.add('hidden');
+        // Only show the green check if the password is strong as well
+        if (checkPasswordStrength() && passwordInput.value !== "") {
+          passwordMatchIcon.classList.remove('hidden');
+        } else {
+          passwordMatchIcon.classList.add('hidden');
+        }
+        return true;
+      }
+    }
+
+    // Listen for input events to validate as the user types
+    passwordInput.addEventListener('input', function() {
+      checkPasswordStrength();
+      checkPasswordsMatch();
+    });
+
+    confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
+
+    // Validate on form submission
+    document.getElementById('signup-form').addEventListener('submit', function(e) {
+      // Validate email
+      const emailInput = document.getElementById('email');
+      if (!emailInput.checkValidity()) {
+        e.preventDefault();
+        emailInput.reportValidity();
+        return;
+      }
+      // Validate password strength and matching
+      const isStrong = checkPasswordStrength();
+      const isMatch = checkPasswordsMatch();
+      if (!isStrong || !isMatch) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
+
+

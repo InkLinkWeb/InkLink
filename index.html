@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <!-- <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+        <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+        <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+        <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
+        <script type="module" src="scripts/accounthandler.js"></script> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
+        <title>Ink Link - Login</title>
+    </head>
+
+    <body class="min-h-screen bg-[#F2F2F2]">
+        <nav class="bg-[#181818]">
+            <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+              <div class="relative flex h-16 items-center justify-between">
+                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                  <div class="flex shrink-0 items-center">
+                    <img class="h-10 w-auto" src="img/inkLinkLogo.png" alt="Ink Link">
+                  </div>
+                  <div class="hidden sm:ml-6 sm:block">
+                    <div class="flex space-x-4">
+                      <!-- links to different pages, add bg-[#5CB8E4] when its the page user is currently on -->
+                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Explore</a>
+                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Chat</a>
+                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Booking</a>
+                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Support</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  <!-- Profile dropdown -->
+                  <div class="relative ml-3">
+                    <div>
+                      <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-[#8758FF] focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden" data-dropdown-toggle="user-menu" id="user-menu-button" aria-expanded="true" aria-haspopup="true">
+                        <span class="absolute -inset-1.5"></span>
+                        <span class="sr-only">Open user menu</span>
+                        <img class="h-12 w-12 object-fit-cover rounded-full" src="img/inkLinkLogo.png" alt="temp image">
+                      </button>
+                    </div>
+          
+                    <!-- Dropdown menu -->
+                    <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden hidden" id="user-menu" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                      <!-- Active: "bg-gray-100 outline-hidden", Not Active: "" -->
+                      <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+                      <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
+                      <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+
+        <header class="text-center py-8">
+            <h1 class="text-4xl font-sans-bold">Login</h1>
+        </header>
+
+        <form id="loginform" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md mx-auto transform hover:shadow-xl transition duration-300 ease-in-out">
+            <fieldset>
+                <legend class="text-md font-semibold mb-4">Login to your Ink Link Account</legend>   
+
+                <div class="mb-4"></div>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">
+                        Email:
+                    </label>
+                    <input
+                        type="text"
+                        id="email"
+                        name="email"
+                        required
+                        class="mt-1 p-2 block w-full rounded-md border outline-none border-gray-300 focus:border-[#8758FF] focus:ring-1 focus:ring-[#8758FF] transform hover:scale-105 focus:scale-100 transition duration-300 ease-in-out"
+                    />
+                </div>
+                
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">
+                        Password:
+                    </label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                        class="mt-1 p-2 block w-full rounded-md border outline-none border-gray-300 focus:border-[#8758FF] focus:ring-1 focus:ring-[#8758FF] transform hover:scale-105 focus:scale-100 transition duration-300 ease-in-out"
+                    />
+                </div>
+                <br>
+                <button type="submit" class="w-full py-3 px-4 text-white font-semibold bg-[#181818] rounded-md focus:outline-none focus:bg-[#181818] hover:bg-[#181818] transform hover:scale-105 active:scale-95 transition duration-300 ease-in-out">
+                    Login
+                </button>
+                <br>
+                <legend class="flex text-md font-semibold mb-4 justify-center items-center py-1">Need to create an account?&nbsp;<a href = "#" class="text-[#5cb8e4] hover:text-[#8758FF] transition">Sign Up</a></legend>
+            </fieldset>
+        </form>
+
+        <!-- <script type="module">
+            import { login, checkAuth } from "./scripts/accounthandler.js";
+            
+            // Check if user is authenticated
+            checkAuth((user) => {
+                if (user) {
+                    window.location.href = "/test.html";  // Redirect if user is logged in
+                }
+            });
+            
+            // Listen for the login form submission
+            document.getElementById("loginform").addEventListener("submit", async (event) => {
+                event.preventDefault();  // Prevent form from refreshing the page
+        
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+        
+                // Attempt to log in
+                login(email, password);
+            });
+        </script> -->
+        <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    </body>
+</html>
