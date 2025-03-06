@@ -10,11 +10,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
-        <title>Ink Link - Login</title>
+        <title>Ink Link</title>
     </head>
-
+    <!-- Copied over from seb's login form.
+        I was able to fix the nav bar-->
     <body class="min-h-screen bg-[#F2F2F2]">
-        <nav class="bg-[#181818]">
+        <nav class=" fixed top-0 left-0 w-full bg-[#181818]">
             <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
               <div class="relative flex h-16 items-center justify-between">
                 <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -55,71 +56,43 @@
             </div>
           </nav>
 
-        <header class="text-center py-8">
-            <h1 class="text-4xl font-sans-bold">Login</h1>
-        </header>
-
-        <form id="loginform" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md mx-auto transform hover:shadow-xl transition duration-300 ease-in-out">
-            <fieldset>
-                <legend class="text-md font-semibold mb-4">Login to your Ink Link Account</legend>   
-
-                <div class="mb-4"></div>
-
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">
-                        Email:
-                    </label>
-                    <input
-                        type="text"
-                        id="email"
-                        name="email"
-                        required
-                        class="mt-1 p-2 block w-full rounded-md border outline-none border-gray-300 focus:border-[#8758FF] focus:ring-1 focus:ring-[#8758FF] transform hover:scale-105 focus:scale-100 transition duration-300 ease-in-out"
-                    />
-                </div>
-                
-                <div class="mb-4">
-                    <label for="password" class="block text-sm font-medium text-gray-700">
-                        Password:
-                    </label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        required
-                        class="mt-1 p-2 block w-full rounded-md border outline-none border-gray-300 focus:border-[#8758FF] focus:ring-1 focus:ring-[#8758FF] transform hover:scale-105 focus:scale-100 transition duration-300 ease-in-out"
-                    />
-                </div>
-                <br>
-                <button type="submit" class="w-full py-3 px-4 text-white font-semibold bg-[#181818] rounded-md focus:outline-none focus:bg-[#181818] hover:bg-[#181818] transform hover:scale-105 active:scale-95 transition duration-300 ease-in-out">
+        <div class="h-screen w-full overflow-y-auto snap-y snap-mandatory">
+            <!-- Hero Section -->
+            <section class="relative w-full h-screen bg-cover bg-center flex items-center justify-center text-white snap-start" 
+                style="background-image: url('img/pexels-photo-2183131.jpeg');">
+            <div class="absolute inset-0 bg-black bg-opacity-50"></div> <!-- Dark overlay -->
+            <div class="relative text-center">
+                <h1 class="text-5xl font-bold">Ink Link</h1>
+                <p class="text-lg mt-4">
+                  Scroll to get your new tattoo ideas
+                </p>
+                <a href="index.html" class="mt-6 inline-block px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition">
                     Login
-                </button>
-                <br>
-                <legend class="flex text-md font-semibold mb-4 justify-center items-center py-1">Need to create an account?&nbsp;<a href = "#" class="text-[#5cb8e4] hover:text-[#8758FF] transition">Sign Up</a></legend>
-            </fieldset>
-        </form>
+                </a>
+            </div>
+            </section>
 
-        <!-- <script type="module">
-            import { login, checkAuth } from "./scripts/accounthandler.js";
-            
-            // Check if user is authenticated
-            checkAuth((user) => {
-                if (user) {
-                    window.location.href = "/test.html";  // Redirect if user is logged in
-                }
-            });
-            
-            // Listen for the login form submission
-            document.getElementById("loginform").addEventListener("submit", async (event) => {
-                event.preventDefault();  // Prevent form from refreshing the page
+
+            <!-- Gallery Section -->
+            <section id="gallery" class="w-full h-screen bg-white pt-16 snap-start">
+                <h2 class="text-3xl font-bold text-center mb-6">Gallery</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <!--fake images for now this is where we will have the images from the database-->
+                    <img src="https://source.unsplash.com/400x400/?nature,water" alt="Gallery Image" class="w-full h-auto rounded-lg shadow-md">
+                    <img src="https://source.unsplash.com/400x400/?city,architecture" alt="Gallery Image" class="w-full h-auto rounded-lg shadow-md">
+                    <img src="https://source.unsplash.com/400x400/?mountain,sunset" alt="Gallery Image" class="w-full h-auto rounded-lg shadow-md">
+                    <img src="https://source.unsplash.com/400x400/?forest,trees" alt="Gallery Image" class="w-full h-auto rounded-lg shadow-md">
+                    <img src="https://source.unsplash.com/400x400/?beach,ocean" alt="Gallery Image" class="w-full h-auto rounded-lg shadow-md">
+                    <img src="https://source.unsplash.com/400x400/?space,stars" alt="Gallery Image" class="w-full h-auto rounded-lg shadow-md">
+                </div>
+            </section>
+
+            <section class="w-full h-screen bg-white pt-16 snap-start">
+                <header>
+                    <h2 class="text-3xl font-bold text-center mb-6">Contact Us</h2>
+                </header>
+            </section>
+        </div>
         
-                const email = document.getElementById("email").value;
-                const password = document.getElementById("password").value;
-        
-                // Attempt to log in
-                login(email, password);
-            });
-        </script> -->
-        <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     </body>
 </html>
