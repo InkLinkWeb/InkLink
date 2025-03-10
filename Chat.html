@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
+    <title>Ink Link - Chat</title>
+</head>
+
+<body class="min-h-screen bg-[#F2F2F2]">
+    <nav class="fixed top-0 left-0 w-full bg-[#181818]">
+        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div class="relative flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <img class="h-10 w-auto" src="img/inkLinkLogo.png" alt="Ink Link">
+                    <span class="text-white text-xl ml-4">Chat</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex h-screen pt-16">
+        <!-- Left Sidebar - User List -->
+        <div class="w-1/4 bg-gray-800 text-white p-4 overflow-y-auto">
+            <h2 class="text-lg font-semibold">Chats</h2>
+            <ul id="chat-list" class="mt-4">
+                <li class="p-2 hover:bg-gray-700 cursor-pointer" onclick="openChat('Public Chat')">Public Chat</li>
+                <li class="p-2 hover:bg-gray-700 cursor-pointer" onclick="openChat('User 1')">User 1</li>
+                <li class="p-2 hover:bg-gray-700 cursor-pointer" onclick="openChat('User 2')">User 2</li>
+                <li class="p-2 hover:bg-gray-700 cursor-pointer" onclick="openChat('User 3')">User 3</li>
+            </ul>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="flex-1 flex flex-col bg-white">
+            <div class="p-4 border-b flex justify-between">
+                <span id="chat-title" class="text-lg font-semibold">Select a chat</span>
+            </div>
+            <div id="chat-box" class="flex-1 p-4 overflow-y-auto"></div>
+            <div class="p-4 border-t flex">
+                <input id="message-input" type="text" placeholder="Type a message..." class="flex-1 p-2 border rounded">
+                <button onclick="sendMessage()" class="ml-2 px-4 py-2 bg-[#181818] text-white rounded">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Popup -->
+    <div id="profile-popup" class="hidden fixed top-1/3 left-1/3 bg-white p-6 shadow-lg rounded-lg w-80">
+        <h2 id="profile-name" class="text-lg font-semibold"></h2>
+        <div class="mt-4 flex justify-between">
+            <button class="px-3 py-1 bg-gray-500 text-white rounded">Add Friend</button>
+        </div>
+        <button onclick="closeProfile()" class="mt-4 px-4 py-2 bg-gray-400 text-white rounded w-full">Close</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let message = document.getElementById("message-input").value;
+            if (message.trim() !== "") {
+                let chatBox = document.getElementById("chat-box");
+                let newMessage = document.createElement("div");
+                newMessage.classList.add("p-2", "border-b", "text-right");
+                newMessage.innerHTML = `<span class='mr-2'>${message}</span><img src='img/user-avatar.png' class='h-8 w-8 rounded-full inline'>`;
+                chatBox.appendChild(newMessage);
+                document.getElementById("message-input").value = "";
+            }
+        }
+
+        function openChat(chatName) {
+            document.getElementById("chat-title").innerText = chatName;
+        }
+
+        function showProfile(userName) {
+            document.getElementById("profile-name").innerText = userName;
+            document.getElementById("profile-popup").classList.remove("hidden");
+        }
+
+        function closeProfile() {
+            document.getElementById("profile-popup").classList.add("hidden");
+        }
+    </script>
+</body>
+
+</html>
