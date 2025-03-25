@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Payment Information</title>
+  </head>
+  <body class="min-h-screen bg-[#F2F2F2]">
+    <!-- Navbar -->
+    <nav class="bg-[#181818] w-full">
+      <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex h-16 items-center justify-between">
+          <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+            <div class="flex shrink-0 items-center">
+              <img class="h-10 w-auto" src="img/inkLinkLogo.png" alt="Ink Link">
+            </div>
+            <div class="hidden sm:ml-6 sm:block">
+              <div class="flex space-x-4">
+                <a href="gallery.html" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Explore</a>
+                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Chat</a>
+                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Booking</a>
+                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Support</a>
+              </div>
+            </div>
+          </div>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <div class="relative ml-3">
+              <div>
+                <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-[#8758FF] focus:ring-offset-2 focus:ring-offset-gray-800">
+                  <span class="absolute -inset-1.5"></span>
+                  <span class="sr-only">Open user menu</span>
+                  <img class="h-12 w-12 object-fit-cover rounded-full" src="img/inkLinkLogo.png" alt="temp image">
+                </button>
+              </div>
+              <!-- Dropdown menu (hidden) -->
+              <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 hidden">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700">Your Profile</a>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700">Settings</a>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700">Sign out</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="text-center py-8">
+      <h1 class="text-4xl font-bold">Payment Information</h1>
+    </header>
+
+    <!-- Payment Form -->
+    <main class="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 transform hover:shadow-xl transition duration-300 ease-in-out">
+      <form id="payment-form">
+        <fieldset>
+          <legend class="text-md font-semibold mb-4 text-center">Enter Your Credit Card Details</legend>
+          
+          <!-- Cardholder Name -->
+          <div class="mb-4">
+            <label for="cardholder-name" class="block text-sm font-medium text-gray-700">Cardholder Name:</label>
+            <input
+              type="text"
+              id="cardholder-name"
+              name="cardholder-name"
+              placeholder="John Doe"
+              class="mt-1 p-2 block w-full rounded-md border border-gray-300 focus:border-[#8758FF] focus:ring-1 focus:ring-[#8758FF] transition duration-300 ease-in-out"
+              required
+            />
+          </div>
+
+          <!-- Card Number -->
+          <div class="mb-4">
+            <label for="card-number" class="block text-sm font-medium text-gray-700">Card Number:</label>
+            <input
+              type="text"
+              id="card-number"
+              name="card-number"
+              placeholder="1234 5678 9012 3456"
+              class="mt-1 p-2 block w-full rounded-md border border-gray-300 focus:border-[#8758FF] focus:ring-1 focus:ring-[#8758FF] transition duration-300 ease-in-out"
+              required
+            />
+          </div>
+
+          <!-- Expiration Date and CVV -->
+          <div class="mb-4 grid grid-cols-2 gap-4">
+            <div>
+              <label for="expiration-date" class="block text-sm font-medium text-gray-700">Expiration Date:</label>
+              <input
+                type="text"
+                id="expiration-date"
+                name="expiration-date"
+                placeholder="MM/YY"
+                class="mt-1 p-2 block w-full rounded-md border border-gray-300 focus:border-[#8758FF] focus:ring-1 focus:ring-[#8758FF] transition duration-300 ease-in-out"
+                required
+              />
+            </div>
+            <div>
+              <label for="cvv" class="block text-sm font-medium text-gray-700">CVV:</label>
+              <input
+                type="text"
+                id="cvv"
+                name="cvv"
+                placeholder="123"
+                class="mt-1 p-2 block w-full rounded-md border border-gray-300 focus:border-[#8758FF] focus:ring-1 focus:ring-[#8758FF] transition duration-300 ease-in-out"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Confirm Payment Button -->
+          <button
+            type="submit"
+            class="w-full py-3 px-4 text-white font-semibold bg-[#181818] rounded-md focus:outline-none focus:bg-[#181818] hover:bg-[#181818] transform hover:scale-105 active:scale-95 transition duration-300 ease-in-out"
+          >
+            Confirm Payment
+          </button>
+        </fieldset>
+      </form>
+    </main>
+  </body>
+</html>
