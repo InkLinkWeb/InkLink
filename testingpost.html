@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
+    <script type="module" src="scripts/AccountHandler.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
+    <title>TESTING</title>
+</head>
+<body>
+    <div class="background-color: #F2F2F2; min-h-screen">
+        <nav class="bg-[#181818]">
+            <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+              <div class="relative flex h-16 items-center justify-between">
+                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                  <div class="flex shrink-0 items-center">
+                    <img class="h-10 w-auto" src="img/inkLinkLogo.png" alt="Ink Link">
+                  </div>
+                  <div class="hidden sm:ml-6 sm:block">
+                    <div class="flex space-x-4">
+                      <!-- links to different pages, add bg-[#5CB8E4] when its the page user is currently on -->
+                      <a href="gallery.html" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Explore</a>
+                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Chat</a>
+                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Booking</a>
+                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Support</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  <!-- Profile dropdown -->
+                  <div class="relative ml-3">
+                    <div>
+                      <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-[#8758FF] focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden" data-dropdown-toggle="user-menu" id="user-menu-button" aria-expanded="true" aria-haspopup="true">
+                        <span class="absolute -inset-1.5"></span>
+                        <span class="sr-only">Open user menu</span>
+                        <img class="h-12 w-12 object-fit-cover rounded-full" src="img/inkLinkLogo.png" alt="temp image">
+                      </button>
+                    </div>
+          
+                    <!-- Dropdown menu -->
+                    <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden hidden" id="user-menu" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                      <!-- Active: "bg-gray-100 outline-hidden", Not Active: "" -->
+                      <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+                      <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
+                      <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+
+
+        <main class="p-4">
+            <h1 class="text-2xl font-bold">Testing Page</h1>
+            <p>This is a testing page for InkLink.</p>
+            <div class = "border-style: solid; border-4 border-gray-500">
+                <p class = "text-center">Upload an image to our gallery:</p>
+                <!-- Form for uploading an image -->
+                <!-- Note: This is a placeholder form. In a real application, you would handle the file upload with JavaScript or a server-side language. -->
+                <form>
+                    <div class = "text-center items-center">
+                        <label for="image-upload" class="block text-sm font-medium text-gray-700">Choose an image:</label>
+                        <input type="file" id="image-upload" name="image-upload" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold hover:file:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8758FF] focus:ring-offset-2 text-center">
+                        <button type="submit" class="mt-4 bg-[#8758FF] text-white px-4 py-2 rounded-md hover:bg-[#6c46c1]">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <footer class="bg-gray-200 text-center p-4 mt-4">
+            <p class="text-sm text-gray-600">© 2023 InkLink. All rights reserved.</p>
+        <script type = "module" src = "scripts/AccountHandler.js">
+            import { 
+                checkAuth, 
+                logout 
+            } from "./scripts/AccountHandler.js"; // Importing the checkAuth and logout functions
+
+            // Check if the user is authenticated
+            checkAuth((user) => {
+                if (!user) {
+                // Redirect to login page if not authenticated
+                    window.location.href = '/index.html';
+                    }
+            });
+        </script>
+        <script type = "module" src = "scripts/ImageHandler.js">
+            import { uploadImage } from "./scripts/ImageHandler.js"; // Importing the uploadImage function
+
+            // This function will handle the image upload when the form is submitted
+            document.querySelector('form').addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent the default form submission
+                const fileInput = document.getElementById('image-upload');
+                const file = fileInput.files[0];
+                if (file) {
+                    uploadImage(file); // Call the uploadImage function with the selected file
+                } else {
+                    alert('Please select an image to upload.');
+                }
+            });
+        </script>
+</body>
+</html>
