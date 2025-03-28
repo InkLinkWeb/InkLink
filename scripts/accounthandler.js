@@ -2,26 +2,26 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+
 // Firebase configuration
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyASqpQV1ZbAReT0uvdnD7FLlVYrq44h1Qc",
-  authDomain: "inklink-37b44.firebaseapp.com",
-  databaseURL: "https://inklink-37b44-default-rtdb.firebaseio.com",
-  projectId: "inklink-37b44",
-  storageBucket: "inklink-37b44.firebasestorage.app",
-  messagingSenderId: "1045754527122",
-  appId: "1:1045754527122:web:89eb567b86164f139a954b",
-  measurementId: "G-VDK4YY132Z"
-};
+    apiKey: "AIzaSyCJJatBLi5cR_GRhbsHQ5SdzlAW3bOswzU",
+    authDomain: "inklinkweb.firebaseapp.com",
+    projectId: "inklinkweb",
+    storageBucket: "inklinkweb.firebasestorage.app",
+    messagingSenderId: "932046606000",
+    appId: "1:932046606000:web:bae7db8b2929df69413575"
+  };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 const analytics = getAnalytics(app);
 console.log("Firebase initialized:", app);
+
 // Function to Sign Up
 export async function signUp(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
@@ -64,7 +64,7 @@ export async function login(email, password) {
             case 'auth/wrong-password':
                 errorMessage = "Login failed: Incorrect password.";
                 break;
-            case 'auth/invalid-login-credentials':  // Handling this specific error code
+            case 'auth/invalid-login-credentials':
                 errorMessage = "Login failed: Invalid login credentials.";
                 break;
             default:
@@ -72,7 +72,7 @@ export async function login(email, password) {
         }
 
         console.error("Login error:", errorMessage);
-        alert(errorMessage);  // Display appropriate error message to the user
+        alert(errorMessage);
     }
 }
 
@@ -94,10 +94,11 @@ export async function logout() {
     }
 }
 
-
 // Function to Check if User is Logged In
 export async function checkAuth(callback) {
     onAuthStateChanged(auth, user => {
       callback(user);
+      console.log("User is signed in:", user.uid);
     });
   }
+

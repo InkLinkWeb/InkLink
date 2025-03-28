@@ -109,5 +109,20 @@
         </p>
       </div>
     </main>
+
+    <script type = "module">
+      import { signUp } from "./scripts/AccountHandler.js";
+      document.getElementById('signup-form').addEventListener('submit', function(e) {
+          e.preventDefault();
+          var email = document.getElementById('email').value;
+          var password = document.getElementById('password').value;
+          signUp(email, password).then(() => {
+              console.log('User signed up:', user);
+              window.location.href = '/gallery.html';
+          }).catch((error) => {
+              document.getElementById('error-message').textContent = error.message;
+          });
+      });
+      </script>
   </body>
 </html>

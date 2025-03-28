@@ -2,11 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <!-- <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+        <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
         <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
         <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
         <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
-        <script type="module" src="scripts/accounthandler.js"></script> -->
+        <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+        <script type="module" src="scripts/AccountHandler.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
@@ -99,13 +100,13 @@
             </fieldset>
         </form>
 
-        <!-- <script type="module">
+        <script type="module">
             import { login, checkAuth } from "./scripts/accounthandler.js";
             
             // Check if user is authenticated
             checkAuth((user) => {
                 if (user) {
-                    window.location.href = "/test.html";  // Redirect if user is logged in
+                    window.location.href = "/gallery.html";  // Redirect if user is logged in
                 }
             });
             
@@ -119,7 +120,7 @@
                 // Attempt to log in
                 login(email, password);
             });
-        </script> -->
+        </script>
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     </body>
 </html>
