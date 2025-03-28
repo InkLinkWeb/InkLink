@@ -93,5 +93,20 @@
 
             </section>
 
+            <script type = "module" src = "scripts/AccountHandler.js">
+              import { 
+                  checkAuth, 
+                  logout 
+              } from "./scripts/AccountHandler.js"; // Importing the checkAuth and logout functions
+  
+              // Check if the user is authenticated
+              checkAuth((user) => {
+                  if (!user) {
+                  // Redirect to login page if not authenticated
+                      console.log('User not authenticated, redirecting to login page.');
+                      window.location.href = '/index.html'; // Redirect to login page
+                      }
+              });
+          </script>
     </body>
 </html>
