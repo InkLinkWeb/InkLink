@@ -63,7 +63,7 @@
                 <p class = "text-center">Upload an image to our gallery:</p>
                 <!-- Form for uploading an image -->
                 <!-- Note: This is a placeholder form. In a real application, you would handle the file upload with JavaScript or a server-side language. -->
-                <form>
+                <form method="POST" enctype="multipart/form-data">
                     <div class = "text-center items-center">
                         <label for="image-upload" class="block text-sm font-medium text-gray-700">Choose an image:</label>
                         <input type="file" id="image-upload" name="image-upload" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold hover:file:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8758FF] focus:ring-offset-2 text-center">
