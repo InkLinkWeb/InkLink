@@ -7,7 +7,6 @@
         <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
         <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
         <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
-        <script type="module" src="scripts/AccountHandler.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
@@ -101,7 +100,7 @@
         </form>
 
         <script type="module">
-            import { login, checkAuth } from "./scripts/accounthandler.js";
+            import { login, checkAuth } from "./scripts/AccountHandler.js";
             
             // Check if user is authenticated
             checkAuth((user) => {
