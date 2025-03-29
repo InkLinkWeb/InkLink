@@ -31,7 +31,7 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fff;
+    color: gray 500;
     text-align: center;
 }
 
@@ -42,12 +42,13 @@ a {
 
 .hero-content h2 {
     font-size: 2rem;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .cta-button {
     padding: 10px 20px;
-    background-color: #ff6f61;
+    margin-top: 20px;
+    background-color: black;
     color: #fff;
     border-radius: 5px;
     font-size: 1.2rem;
@@ -55,7 +56,7 @@ a {
 }
 
 .cta-button:hover {
-    background-color: #ff4a3d;
+    background-color: gray;
 }
 
 /* About Section */
