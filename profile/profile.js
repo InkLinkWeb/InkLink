@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
       daySpan.addEventListener("click", function () {
         var selectedDay = this.textContent;
         window.location.href =
-          "booking.html?year=" +
+          "/payment.html?year=" +
           currentYear +
           "&month=" +
           (currentMonth + 1) +
