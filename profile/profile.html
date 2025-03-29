@@ -9,6 +9,26 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <style>
+      /* Inline styles for the calendar – these can also be moved to profile.css */
+      .calendar .days span {
+        display: inline-block;
+        width: 14%;
+        padding: 10px;
+        margin: 2px;
+        text-align: center;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      .calendar .days span:hover {
+        background: #ddd;
+      }
+      .calendar .days span.current {
+        background: #181818;
+        color: #fff;
+        border-radius: 50%;
+      }
+    </style>
   </head>
   <body>
     <!-- Hero Section -->
@@ -35,10 +55,11 @@
     <section id="appointment" class="appointment">
       <div class="container">
         <h2>Book an Appointment</h2>
-        <p>January 2017</p>
+        <!-- This paragraph will display the current month and year -->
+        <p id="monthYear"></p>
         <div class="calendar">
           <div class="weekdays">
-            <span>No</span>
+            <span>Mo</span>
             <span>Tu</span>
             <span>We</span>
             <span>Th</span>
@@ -47,7 +68,7 @@
             <span>Su</span>
           </div>
           <div class="days">
-            <!-- Days will be populated dynamically using JavaScript -->
+            <!-- Days will be populated dynamically via JavaScript -->
           </div>
         </div>
       </div>
@@ -86,7 +107,7 @@
       </div>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- Link to external JavaScript file -->
     <script src="profile.js"></script>
   </body>
 </html>
