@@ -20,7 +20,7 @@ const firebaseConfig = {
   // Initialize Cloud Storage and get a reference to the service
   const storage = getStorage(app);
   console.log("Storage initialized:", storage);
-  
+
   export async function UploadImage(file) {
     // Check if a user is signed in
     const user = auth.currentUser;
@@ -31,7 +31,8 @@ const firebaseConfig = {
   
     // Proceed with the upload
     const userID = user.uid;
-    const storageRef = ref(storage, `images/${userID}/${file.name}`);
+    // Update the storage reference to save under images/Users/{userID}/{file.name}
+    const storageRef = ref(storage, `images/Users/${userID}/${file.name}`);
   
     try {
       // Upload the file
@@ -45,6 +46,4 @@ const firebaseConfig = {
     } catch (error) {
       console.error('Upload failed', error);
     }
-  }
-
-  
+}

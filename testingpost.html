@@ -72,44 +72,33 @@
                 </form>
             </div>
         </main>
-        <footer class="bg-gray-200 text-center p-4 mt-4">
-            <p class="text-sm text-gray-600">© 2023 InkLink. All rights reserved.</p>
-        <script type = "module" src = "scripts/AccountHandler.js">
-            import { 
-                checkAuth, 
-                logout 
-            } from "./scripts/AccountHandler.js"; // Importing the checkAuth and logout functions
 
-            firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    // User logged in already or has just logged in.
-    console.log(user.uid);
-  } else {
-    // User not logged in or has just logged out.
-  }
-});
 
-            // Check if the user is authenticated
-            checkAuth((user) => {
-                if (!user) {
-                // Redirect to login page if not authenticated
-                    window.location.href = '/index.html';
-                    }
-            });
+            <script type="module">
+              import { login, checkAuth } from "/InkLink/scripts/AccountHandler.js";
+              
+              // Check if user is authenticated
+              checkAuth((user) => {
+                  if (!user) {
+                      window.location.href = "/InkLink/index.html";  // Redirect if user is logged in
+                  }
+              });
         </script>
-        <script type = "module" src = "scripts/ImageHandler.js">
+
+
+        <script type = "module">
             import { uploadImage } from "./scripts/ImageHandler.js"; // Importing the uploadImage function
 
             // This function will handle the image upload when the form is submitted
             document.querySelector('form').addEventListener('submit', (event) => {
-                event.preventDefault(); // Prevent the default form submission
-                const fileInput = document.getElementById('image-upload');
-                const file = fileInput.files[0];
-                if (file) {
-                    uploadImage(file); // Call the uploadImage function with the selected file
-                } else {
-                    alert('Please select an image to upload.');
-                }
+              event.preventDefault(); // Prevent the default form submission
+              const fileInput = document.getElementById('image-upload');
+              const file = fileInput.files[0];
+              if (file) {
+                uploadImage(file); // Call the uploadImage function with the selected file
+              } else {
+                alert('Please select an image to upload.');
+              }
             });
         </script>
 </body>
