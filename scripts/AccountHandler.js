@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Firebase configuration
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -18,20 +17,34 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const database = getDatabase(app);
-const analytics = getAnalytics(app);
+const db = getFirestore(app);
 console.log("Firebase initialized:", app);
 
 // Function to Sign Up
 export async function signUp(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        console.log("User signed up:", userCredential.user.uid);
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        const uid = user.uid;
+        console.log("User signed up:", uid);
+  
+        // Create a Firestore document for the new user
+        try {
+          await setDoc(doc(db, "users", uid), {
+            displayName: "New User",
+            profilePictureURL: "",
+            bio: "",
+            createdAt: new Date()
+          });
+          console.log("User document created in Firestore for UID:", uid);
+        } catch (error) {
+          console.error("Error creating user document in Firestore:", error);
+        }
       })
       .catch(error => {
         console.error("Signup error:", error.message);
       });
-    }
+  }
 
 // Function to Log In
 export async function login(email, password) {
