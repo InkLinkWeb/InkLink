@@ -96,8 +96,13 @@ export async function logout() {
 // Function to Check if User is Logged In
 export async function checkAuth(callback) {
     onAuthStateChanged(auth, user => {
-      callback(user);
-      console.log("User is signed in:", user.uid);
+      if (user) {
+          console.log("User is signed in:", user.uid);
+          callback(user);
+      } else {
+          console.log("No user is signed in.");
+          callback(null);
+      }
     });
-  }
+}
 
