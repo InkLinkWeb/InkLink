@@ -117,8 +117,7 @@
           var email = document.getElementById('email').value;
           var password = document.getElementById('password').value;
           signUp(email, password).then(() => {
-              console.log('User signed up:', user);
-              window.location.href = '/gallery.html';
+              window.location.href = '/InkLink/index.html';
           }).catch((error) => {
               document.getElementById('error-message').textContent = error.message;
           });
