@@ -22,25 +22,14 @@ console.log("Firebase initialized:", app);
 
 // Function to Sign Up
 export async function signUp(email, password) {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-  
-      console.log("User signed up:", user.uid);
-  
-      // Create the profile document in Firestore
-      const userRef = doc(db, "users", user.uid);
-      await setDoc(userRef, {
-        displayName: "New User",
-        bio: "This is a bio.",
-        profilePictureURL: ""
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
+        console.log("User signed up:", userCredential.user.uid);
+      })
+      .catch(error => {
+        console.error("Signup error:", error.message);
       });
-  
-      console.log("Profile document created for user:", user.uid);
-    } catch (error) {
-      console.error("Signup error:", error.message);
     }
-  }
   
 
 // Function to Log In
