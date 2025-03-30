@@ -39,10 +39,9 @@ export async function login(email, password) {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         console.log("User signed in:", user.uid);
-        
         // Check if user is valid before redirecting
         if (user) {
-            window.location.href = "/test.html";  // Redirect after successful login
+            window.location.href = "/InkLink/gallery.html";
         } else {
             console.error("Login failed: User is undefined");
             alert("Login failed: User is undefined");
@@ -81,7 +80,7 @@ export async function logout() {
     try {
         await signOut(auth);
         console.log("User logged out");
-        window.location.href = "/index.html";  // Redirect after successful logout
+        window.location.href = "/InkLink/index.html";  // Redirect after successful logout
     } catch (error) {
         // Handle case when no user is signed in
         if (error.code === 'auth/no-current-user') {
