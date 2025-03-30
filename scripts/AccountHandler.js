@@ -23,29 +23,33 @@ console.log("Firebase initialized:", app);
 // Function to Sign Up
 export async function signUp(email, password) {
     try {
+      // Create the user account
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log("User signed up:", user.uid);
+
+      // Wait until user is fully created in Firebase Auth
+      if (!user || !user.uid) {
+        throw new Error("User creation failed or UID is missing");
+      }
   
       const userRef = doc(db, "users", user.uid);
       console.log("Attempting to create document at:", userRef);
   
-      try {
-        await setDoc(userRef, {
-          displayName: "Default Name",
-          bio: "This is a bio.",
-          profilePictureURL: "default-profile-pic.jpg"
-        });
-        console.log("Profile document created for user:", user.uid);
-      } catch (error) {
-        console.error("Error creating document:", error);
-      }
+      // Create user document in Firestore with default data
+      await setDoc(userRef, {
+        displayName: "Default Name",
+        bio: "This is a bio.",
+        profilePictureURL: ""
+      });
   
       console.log("Profile document created for user:", user.uid);
     } catch (error) {
       console.error("Signup error:", error.message);
+      alert("Signup error: " + error.message);
     }
-  }
+}
+
 
 // Function to Log In
 export async function login(email, password) {
