@@ -30,11 +30,16 @@ export async function signUp(email, password) {
       const userRef = doc(db, "users", user.uid);
       console.log("Attempting to create document at:", userRef);
   
-      await setDoc(userRef, {
-        displayName: "Default Name",
-        bio: "This is a bio.",
-        profilePictureURL: "default-profile-pic.jpg"
-      });
+      try {
+        await setDoc(userRef, {
+          displayName: "Default Name",
+          bio: "This is a bio.",
+          profilePictureURL: "default-profile-pic.jpg"
+        });
+        console.log("Profile document created for user:", user.uid);
+      } catch (error) {
+        console.error("Error creating document:", error);
+      }
   
       console.log("Profile document created for user:", user.uid);
     } catch (error) {
