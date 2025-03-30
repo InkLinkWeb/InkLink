@@ -22,14 +22,26 @@ console.log("Firebase initialized:", app);
 
 // Function to Sign Up
 export async function signUp(email, password) {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        console.log("User signed up:", userCredential.user.uid);
-      })
-      .catch(error => {
-        console.error("Signup error:", error.message);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log("User signed up:", user.uid);
+  
+      const userRef = doc(db, "users", user.uid);
+      console.log("Attempting to create document at:", userRef);
+  
+      await setDoc(userRef, {
+        displayName: "Default Name",
+        bio: "This is a bio.",
+        profilePictureURL: "default-profile-pic.jpg"
       });
+  
+      console.log("Profile document created for user:", user.uid);
+    } catch (error) {
+      console.error("Signup error:", error.message);
     }
+  }
+  
   
 
 // Function to Log In
@@ -75,26 +87,22 @@ export async function login(email, password) {
 }
 
 // Function to Log Out
-export async function signUp(email, password) {
+export async function logout() {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      console.log("User signed up:", user.uid);
-  
-      const userRef = doc(db, "users", user.uid);
-      console.log("Attempting to create document at:", userRef);
-  
-      await setDoc(userRef, {
-        displayName: "Default Name",
-        bio: "This is a bio.",
-        profilePictureURL: "default-profile-pic.jpg"
-      });
-  
-      console.log("Profile document created for user:", user.uid);
+        await signOut(auth);
+        console.log("User logged out");
+        window.location.href = "/InkLink/index.html";  // Redirect after successful logout
     } catch (error) {
-      console.error("Signup error:", error.message);
+        // Handle case when no user is signed in
+        if (error.code === 'auth/no-current-user') {
+            console.log("No user is currently signed in.");
+            alert("You are not logged in.");
+        } else {
+            console.error("Logout error:", error.message);
+            alert("Logout failed: " + error.message);
+        }
     }
-  }
+}
 
 // Function to Check if User is Logged In
 export async function checkAuth(callback) {
