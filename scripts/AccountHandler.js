@@ -75,22 +75,26 @@ export async function login(email, password) {
 }
 
 // Function to Log Out
-export async function logout() {
+export async function signUp(email, password) {
     try {
-        await signOut(auth);
-        console.log("User logged out");
-        window.location.href = "/InkLink/index.html";  // Redirect after successful logout
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log("User signed up:", user.uid);
+  
+      const userRef = doc(db, "users", user.uid);
+      console.log("Attempting to create document at:", userRef);
+  
+      await setDoc(userRef, {
+        displayName: "Default Name",
+        bio: "This is a bio.",
+        profilePictureURL: "default-profile-pic.jpg"
+      });
+  
+      console.log("Profile document created for user:", user.uid);
     } catch (error) {
-        // Handle case when no user is signed in
-        if (error.code === 'auth/no-current-user') {
-            console.log("No user is currently signed in.");
-            alert("You are not logged in.");
-        } else {
-            console.error("Logout error:", error.message);
-            alert("Logout failed: " + error.message);
-        }
+      console.error("Signup error:", error.message);
     }
-}
+  }
 
 // Function to Check if User is Logged In
 export async function checkAuth(callback) {
