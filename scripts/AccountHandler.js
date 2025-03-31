@@ -23,46 +23,38 @@ console.log("Firebase initialized:", app);
 // Function to Sign Up
 export async function signUp(email, password) {
     try {
-      // Create the user account
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      console.log("User signed up:", user.uid);
-
-      // Wait until user is fully created in Firebase Auth
-      if (!user || !user.uid) {
-        throw new Error("User creation failed or UID is missing");
-      }
-  
-      const userRef = doc(db, "users", user.uid);
-      console.log("Attempting to create document at:", userRef);
-  
-      // Create user document in Firestore with default data
-      await setDoc(userRef, {
-        displayName: "Default Name",
-        bio: "This is a bio.",
-        profilePictureURL: ""
-      });
-  
-      console.log("Profile document created for user:", user.uid);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        console.log("User signed up:", userCredential.user.uid);
     } catch (error) {
-      console.error("Signup error:", error.message);
-      alert("Signup error: " + error.message);
+        console.error("Signup error:", error.message);
+        alert("Signup error: " + error.message);
     }
 }
 
-// Function to Log In
+// Function to Log In and Check/Create Firestore Entry
 export async function login(email, password) {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         console.log("User signed in:", user.uid);
-        // Check if user is valid before redirecting
-        if (user) {
-            window.location.href = "/InkLink/gallery.html";
+
+        // Check if the Firestore document exists
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+            console.log("User document does not exist. Creating one...");
+            await setDoc(userRef, {
+                displayName: user.displayName || "Default Name",
+                bio: "This is a bio.",
+                profilePictureURL: ""
+            });
+            console.log("Profile document created for user:", user.uid);
         } else {
-            console.error("Login failed: User is undefined");
-            alert("Login failed: User is undefined");
+            console.log("User document already exists.");
         }
+        // Redirect user after successful login
+        window.location.href = "/InkLink/gallery.html";
     } catch (error) {
         // Handle different Firebase auth errors
         let errorMessage;
