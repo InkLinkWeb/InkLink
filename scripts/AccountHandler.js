@@ -23,30 +23,32 @@ console.log("Firebase initialized:", app);
 // Function to Sign Up
 export async function signUp(email, password) {
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        console.log("User signed up:", userCredential.user.uid);
+      // Create the user account
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log("User signed up:", user.uid);
+
+      // Wait until user is fully created in Firebase Auth
+      if (!user || !user.uid) {
+        throw new Error("User creation failed or UID is missing");
+      }
+  
+      const userRef = doc(db, "users", user.uid);
+      console.log("Attempting to create document at:", userRef);
+  
+      // Create user document in Firestore with default data
+      await setDoc(userRef, {
+        displayName: "Default Name",
+        bio: "This is a bio.",
+        profilePictureURL: ""
+      });
+  
+      console.log("Profile document created for user:", user.uid);
     } catch (error) {
-        console.error("Signup error:", error.message);
-        alert("Signup error: " + error.message);
+      console.error("Signup error:", error.message);
+      alert("Signup error: " + error.message);
     }
 }
-
-// Listen for auth state changes and create Firestore document once the user is authenticated
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        const userRef = doc(db, "users", user.uid);
-        try {
-            await setDoc(userRef, {
-                displayName: user.displayName || "New User",
-                bio: "This is a bio.",
-                profilePictureURL: ""
-            });
-            console.log("Profile document created for user:", user.uid);
-        } catch (error) {
-            console.error("Error creating Firestore document:", error.message);
-        }
-    }
-});
 
 
 // Function to Log In
