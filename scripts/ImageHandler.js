@@ -31,7 +31,7 @@ export async function uploadImage(file, caption) {
 
     const userId = user.uid;
     const timestamp = new Date().toISOString();
-    const fileName = `${userId}_${timestamp}_${file.name}`;
+    const fileName = `${timestamp}_${file.name}`;
     const storageRef = ref(storage, `uploads/${userId}/${fileName}`);
 
     try {
