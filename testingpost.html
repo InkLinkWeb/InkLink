@@ -7,6 +7,7 @@
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
     <script type="module" src="scripts/AccountHandler.js"></script>
+    <script type="module" src="scripts/AccountHandler.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
@@ -59,48 +60,51 @@
         <main class="p-4">
             <h1 class="text-2xl font-bold">Testing Page</h1>
             <p>This is a testing page for InkLink.</p>
-            <div class = "border-style: solid; border-4 border-gray-500">
-                <p class = "text-center">Upload an image to our gallery:</p>
-                <!-- Form for uploading an image -->
-                <!-- Note: This is a placeholder form. In a real application, you would handle the file upload with JavaScript or a server-side language. -->
-                <form method="POST" enctype="multipart/form-data">
-                    <div class = "text-center items-center">
-                        <label for="image-upload" class="block text-sm font-medium text-gray-700">Choose an image:</label>
-                        <input type="file" id="image-upload" name="image-upload" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold hover:file:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8758FF] focus:ring-offset-2 text-center">
-                        <button type="submit" class="mt-4 bg-[#8758FF] text-white px-4 py-2 rounded-md hover:bg-[#6c46c1]">Upload</button>
-                    </div>
-                </form>
-            </div>
-        </main>
+            <div class="border-4 border-gray-500 p-4 rounded-lg">
+              <p class="text-center font-semibold">Upload an image to our gallery:</p>
+              <!-- Upload Form -->
+              <form id="upload-form">
+                  <div class="text-center">
+                      <label for="image-upload" class="block text-sm font-medium text-gray-700">Choose an image:</label>
+                      <input type="file" id="image-upload" name="image-upload" accept="image/*"
+                          class="mt-1 block w-full text-sm text-gray-500 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-semibold hover:file:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#8758FF] focus:ring-offset-2 text-center">
+                      <!-- Caption Input -->
+                      <label for="caption" class="block text-sm font-medium text-gray-700 mt-3">Add a caption:</label>
+                      <input type="text" id="caption" name="caption"
+                          class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#8758FF] focus:border-[#8758FF] sm:text-sm"
+                          placeholder="Enter a caption for your image">     
+                      <button type="submit"
+                          class="mt-4 bg-[#8758FF] text-white px-4 py-2 rounded-md hover:bg-[#6c46c1]">
+                          Upload
+                      </button>
+                  </div>
+              </form>
+          </div>
 
-
-            <script type="module">
-              import { login, checkAuth } from "/InkLink/scripts/AccountHandler.js";
-              
-              // Check if user is authenticated
-              checkAuth((user) => {
-                  if (!user) {
-                      window.location.href = "/InkLink/index.html";  // Redirect if user is logged in
-                  }
-              });
-        </script>
-
-
-        <script type = "module">
-            import { uploadImage } from "./scripts/ImageHandler.js"; // Importing the uploadImage function
-
-            // This function will handle the image upload when the form is submitted
-            document.querySelector('form').addEventListener('submit', (event) => {
-              event.preventDefault(); // Prevent the default form submission
-              const fileInput = document.getElementById('image-upload');
-              const file = fileInput.files[0];
-              if (file) {
-                uploadImage(file); // Call the uploadImage function with the selected file
-              } else {
-                alert('Please select an image to upload.');
-              }
+          <script type="module">
+            import { uploadImage } from "./scripts/ImageHandler.js";
+        
+            document.getElementById('upload-form').addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent default form submission
+        
+                const fileInput = document.getElementById('image-upload');
+                const captionInput = document.getElementById('caption');
+        
+                const file = fileInput.files[0];
+                const caption = captionInput.value.trim(); // Trim whitespace from caption
+        
+                if (!file) {
+                    alert('Please select an image to upload.');
+                    return;
+                }
+        
+                if (!caption) {
+                    alert('Please enter a caption.');
+                    return;
+                }
+        
+                await uploadImage(file, caption); // Upload image with caption
             });
-
         </script>
         <script src="/InkLink/scripts/DropdownHandler.js"></script>
 </body>

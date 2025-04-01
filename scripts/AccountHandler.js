@@ -19,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 console.log("Firebase initialized:", app);
-  
+
 // Function to Sign Up
 export async function signUp(email, password) {
     try {
