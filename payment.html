@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Booking & Payment Plan</title>
+    <style>
+      /* Ensure payment options indicate they are clickable */
+      .payment-option {
+        cursor: pointer;
+      }
+      /* Custom style for the selected payment option */
+      .payment-option.selected {
+        border-color: #8758FF !important;
+        box-shadow: 0 0 10px rgba(135, 88, 255, 0.5);
+        background-color: #f0f0ff;
+      }
+    </style>
   </head>
   <body class="min-h-screen bg-[#F2F2F2]">
     <!-- Navbar -->
@@ -68,17 +80,17 @@
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Payment Plan Options</h2>
         <div class="space-y-4">
           <!-- Option 1 -->
-          <div class="p-4 border border-gray-300 rounded-md hover:shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">
+          <div class="payment-option p-4 border border-gray-300 rounded-md hover:shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">
             <h3 class="text-lg font-bold text-gray-800">Basic Plan</h3>
             <p class="text-gray-600">Pay as you go: $50 per hour</p>
           </div>
           <!-- Option 2 -->
-          <div class="p-4 border border-gray-300 rounded-md hover:shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">
+          <div class="payment-option p-4 border border-gray-300 rounded-md hover:shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">
             <h3 class="text-lg font-bold text-gray-800">Standard Plan</h3>
             <p class="text-gray-600">Flat rate: $200 per session</p>
           </div>
           <!-- Option 3 -->
-          <div class="p-4 border border-gray-300 rounded-md hover:shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">
+          <div class="payment-option p-4 border border-gray-300 rounded-md hover:shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">
             <h3 class="text-lg font-bold text-gray-800">Premium Plan</h3>
             <p class="text-gray-600">Pay in full: $1200</p>
           </div>
@@ -92,18 +104,27 @@
     </main>
 
     <script>
-      // On page load, parse the query parameters and update the date input field
       document.addEventListener("DOMContentLoaded", function() {
+        // Update booking date from URL query parameters, if present.
         const params = new URLSearchParams(window.location.search);
         if (params.has("year") && params.has("month") && params.has("day")) {
           const year = params.get("year");
-          // Ensure month and day are two digits
           const month = params.get("month").padStart(2, '0');
           const day = params.get("day").padStart(2, '0');
           const selectedDate = `${year}-${month}-${day}`;
           document.getElementById("booking-date").value = selectedDate;
-          // Optionally, you can scroll to the booking section or show a message.
         }
+
+        // Add click event listener to each payment option for highlighting
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        paymentOptions.forEach(option => {
+          option.addEventListener('click', () => {
+            // Remove 'selected' class from all options
+            paymentOptions.forEach(opt => opt.classList.remove('selected'));
+            // Add 'selected' class to the clicked option
+            option.classList.add('selected');
+          });
+        });
       });
     </script>
     <script src="/InkLink/scripts/DropdownHandler.js"></script>
