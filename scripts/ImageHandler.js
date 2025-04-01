@@ -22,34 +22,30 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Function to upload an image
-export async function uploadImage(file, caption) {
+export async function uploadImage(file, caption, tattooStyle) {
     const user = auth.currentUser;
     if (!user) {
         alert("You must be logged in to upload images.");
         return;
     }
-
     const userId = user.uid;
     const timestamp = new Date().toISOString();
     const fileName = `${timestamp}_${file.name}`;
     const storageRef = ref(storage, `uploads/${userId}/${fileName}`);
-
     try {
         // Upload file to Firebase Storage
         const snapshot = await uploadBytes(storageRef, file);
         console.log("File uploaded:", snapshot);
-
         // Get download URL
         const downloadURL = await getDownloadURL(snapshot.ref);
-
         // Save metadata in Firestore
         await addDoc(collection(db, "images"), {
             userId: userId,
             caption: caption,
+            tattooStyle: tattooStyle.toLowerCase(),
             imageUrl: downloadURL,
             timestamp: serverTimestamp()
         });
-
         console.log("Image metadata saved to Firestore.");
         alert("Image uploaded successfully!");
     } catch (error) {

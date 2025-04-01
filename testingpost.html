@@ -72,7 +72,12 @@
                       <label for="caption" class="block text-sm font-medium text-gray-700 mt-3">Add a caption:</label>
                       <input type="text" id="caption" name="caption"
                           class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#8758FF] focus:border-[#8758FF] sm:text-sm"
-                          placeholder="Enter a caption for your image">     
+                          placeholder="Enter a caption for your image">    
+                      <!-- Style Input -->
+                      <label for="style" class="block text-sm font-medium text-gray-700 mt-3">Select a style:</label>
+                      <input type="text" id="style" name="style"
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#8758FF] focus:border-[#8758FF] sm:text-sm"
+                        placeholder="Enter the tattoo style (e.g., Traditional, Blackwork, Realism)">
                       <button type="submit"
                           class="mt-4 bg-[#8758FF] text-white px-4 py-2 rounded-md hover:bg-[#6c46c1]">
                           Upload
@@ -83,27 +88,30 @@
 
           <script type="module">
             import { uploadImage } from "./scripts/ImageHandler.js";
-        
             document.getElementById('upload-form').addEventListener('submit', async (event) => {
-                event.preventDefault(); // Prevent default form submission
-        
-                const fileInput = document.getElementById('image-upload');
-                const captionInput = document.getElementById('caption');
-        
-                const file = fileInput.files[0];
-                const caption = captionInput.value.trim(); // Trim whitespace from caption
-        
-                if (!file) {
-                    alert('Please select an image to upload.');
-                    return;
-                }
-        
-                if (!caption) {
-                    alert('Please enter a caption.');
-                    return;
-                }
-        
-                await uploadImage(file, caption); // Upload image with caption
+            event.preventDefault(); // Prevent default form submission
+            const fileInput = document.getElementById('image-upload');
+            const captionInput = document.getElementById('caption');
+            const styleInput = document.getElementById('style'); // Get style input value
+            const file = fileInput.files[0];
+            const caption = captionInput.value.trim();
+            const style = styleInput.value.trim();
+            if (!file) {
+                alert('Please select an image to upload.');
+                return;
+            }
+            if (!caption) {
+                alert('Please enter a caption.');
+                return;
+            }
+            if (!style) {
+                alert('Please enter a tattoo style.');
+                return;
+            }
+            await uploadImage(file, caption, style); // Upload image
+            fileInput.value = ''; // Clear file input
+            captionInput.value = ''; // Clear caption input
+            styleInput.value = ''; // Clear style input
             });
         </script>
         <script src="/InkLink/scripts/DropdownHandler.js"></script>
