@@ -31,30 +31,39 @@ export async function signUp(email, password) {
     }
 }
 
-// Function to Log In and Check/Create Firestore Entry
 export async function login(email, password) {
     try {
+        // Sign in the user with email and password
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         console.log("User signed in:", user.uid);
 
-        // Check if the Firestore document exists
+        // Reference to the Firestore user document
         const userRef = doc(db, "default", user.uid);
+        console.log("userRef:", userRef);
+        
+        // Get the user document to check if it exists
         const userSnap = await getDoc(userRef);
 
+        // Check if the user document exists
         if (!userSnap.exists()) {
             console.log("User document does not exist. Creating one...");
+
+            // Create a new Firestore document for the user under 'default/userID'
             await setDoc(userRef, {
                 displayName: user.displayName || "Default Name",
                 bio: "This is a bio.",
                 profilePictureURL: ""
             });
+
             console.log("Profile document created for user:", user.uid);
         } else {
             console.log("User document already exists.");
         }
-        // Redirect user after successful login
+
+        // After ensuring the user document exists or was created, redirect the user
         window.location.href = "/InkLink/gallery.html";
+
     } catch (error) {
         // Handle different Firebase auth errors
         let errorMessage;
@@ -71,9 +80,6 @@ export async function login(email, password) {
                 break;
             case 'auth/wrong-password':
                 errorMessage = "Login failed: Incorrect password.";
-                break;
-            case 'auth/invalid-login-credentials':
-                errorMessage = "Login failed: Invalid login credentials.";
                 break;
             default:
                 errorMessage = "Login failed: " + error.message;
