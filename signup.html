@@ -114,18 +114,18 @@
     </main>
 
     <script type = "module">
-      import { signUp } from "/InkLink/scripts/AccountHandler.js";
+      import { signUp } from "/scripts/AccountHandler.js";
       document.getElementById('signup-form').addEventListener('submit', function(e) {
           e.preventDefault();
           var email = document.getElementById('email').value;
           var password = document.getElementById('password').value;
           signUp(email, password).then(() => {
-              window.location.href = '/InkLink/index.html';
+              window.location.href = 'index.html';
           }).catch((error) => {
               document.getElementById('error-message').textContent = error.message;
           });
       });
       </script>
-      <script src="/InkLink/scripts/DropdownHandler.js"></script>
+      <script src="/scripts/DropdownHandler.js"></script>
   </body>
 </html>

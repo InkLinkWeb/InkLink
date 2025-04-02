@@ -98,12 +98,12 @@
         </form>
 
         <script type="module">
-            import { login, checkAuth } from "/InkLink/scripts/AccountHandler.js";
+            import { login, checkAuth } from "/scripts/AccountHandler.js";
             
             // Check if user is authenticated
             checkAuth((user) => {
                 if (user) {
-                    window.location.href = "/InkLink/gallery.html";  // Redirect if user is logged in
+                    window.location.href = "gallery.html";  // Redirect if user is logged in
                 }
             });
             
@@ -118,6 +118,6 @@
                 login(email, password);
             });
         </script>
-        <script src="/InkLink/scripts/DropdownHandler.js"></script>
+        <script src="/scripts/DropdownHandler.js"></script>
     </body>
 </html>
