@@ -38,9 +38,9 @@ export async function uploadImage(file, caption, tattooStyle) {
         console.log("File uploaded:", snapshot);
         // Get download URL
         const downloadURL = await getDownloadURL(snapshot.ref);
-        // Save metadata in Firestore
-        await addDoc(collection(db, "images"), {
-            userId: userId,
+        // Generate a new document reference for the image under the user's images collection
+        const imageRef = collection(db, `users/${userId}/images`);
+        const imageDoc = await addDoc(imageRef, {
             caption: caption,
             tattooStyle: tattooStyle.toLowerCase(),
             imageUrl: downloadURL,
