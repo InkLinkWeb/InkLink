@@ -19,7 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const auth = getAuth(app);
-const db = getFirestore(app, 'users');
+const db = getFirestore(app);
 console.log('Firestore initialized:', db);
 
 // Function to upload an image
