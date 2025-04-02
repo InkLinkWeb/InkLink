@@ -39,7 +39,7 @@ export async function login(email, password) {
         console.log("User signed in:", user.uid);
 
         // Check if the Firestore document exists
-        const userRef = doc(db, "users", user.uid);
+        const userRef = doc(db, "default", user.uid);
         const userSnap = await getDoc(userRef);
 
         if (!userSnap.exists()) {
