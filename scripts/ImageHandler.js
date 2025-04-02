@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
-setFirestoreSettings(db, { experimentalForceLongPolling: true });
+console.log('Firestore initialized:', db);
 
 // Function to upload an image
 export async function uploadImage(file, caption, tattooStyle) {
