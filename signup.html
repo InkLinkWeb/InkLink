@@ -125,20 +125,53 @@
     </main>
 
     <script type="module">
-      import { signUp } from "/scripts/AccountHandler.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+      import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-      document.getElementById('signup-form').addEventListener('submit', function(e) {
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCJJatBLi5cR_GRhbsHQ5SdzlAW3bOswzU",
+        authDomain: "inklinkweb.firebaseapp.com",
+        projectId: "inklinkweb",
+        storageBucket: "inklinkweb.firebasestorage.app",
+        messagingSenderId: "932046606000",
+        appId: "1:932046606000:web:bae7db8b2929df69413575"
+  };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      document.getElementById('signup-form').addEventListener('submit', async function (e) {
         e.preventDefault();
+
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        signUp(email, password).then(() => {
-          // Redirect to profile page with the user's name as a query parameter
+        try {
+          // Create the user in Firebase Authentication
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+
+          // Update the user's display name
+          await updateProfile(user, { displayName: name });
+
+          // Save the user's profile data to Firestore
+          const userDoc = doc(db, "users", user.uid);
+          await setDoc(userDoc, {
+            name: name,
+            bio: "This is your bio. Click edit to update it!",
+            profilePicture: "/InkLink/img/default-profile.png", // Default profile picture
+          });
+
+          // Redirect to the custom profile page
           window.location.href = `customProfile.html?name=${encodeURIComponent(name)}`;
-        }).catch((error) => {
+        } catch (error) {
           document.getElementById('error-message').textContent = error.message;
-        });
+        }
       });
     </script>
     <script type="module" src="/scripts/DropdownHandler.js"></script>
