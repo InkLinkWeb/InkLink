@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Profile</title>
+    <style>
+      /* Animation for the welcome message */
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+      .fade-out {
+        animation: fadeOut 2s forwards;
+      }
+    </style>
+  </head>
+  <body class="bg-[#F2F2F2] min-h-screen flex items-center justify-center">
+    <!-- Welcome Message -->
+    <div id="welcome-container" class="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+      <h1 id="welcome-message" class="text-2xl font-bold mb-4"></h1>
+      <p class="text-gray-600">Redirecting to your profile...</p>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profile-container" class="hidden max-w-4xl w-full bg-white rounded-lg shadow-lg p-8">
+      <div class="flex items-center space-x-6">
+        <img
+          id="profile-picture"
+          class="h-24 w-24 rounded-full object-cover border border-gray-300"
+          src=""
+          alt="Profile Picture"
+        />
+        <div>
+          <h1 id="profile-name" class="text-3xl font-bold"></h1>
+          <p id="profile-bio" class="text-gray-600">This is your bio. Click edit to update it!</p>
+        </div>
+      </div>
+      <button
+        id="edit-profile-btn"
+        class="mt-4 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition"
+      >
+        Edit Profile
+      </button>
+
+      <!-- Edit Profile Form -->
+      <form id="edit-profile-form" class="hidden mt-6 space-y-4">
+        <div>
+          <label for="edit-name" class="block text-sm font-medium">Name</label>
+          <input
+            type="text"
+            id="edit-name"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
+          />
+        </div>
+        <div>
+          <label for="edit-bio" class="block text-sm font-medium">Bio</label>
+          <textarea
+            id="edit-bio"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
+          ></textarea>
+        </div>
+        <div>
+          <label for="edit-picture" class="block text-sm font-medium">Profile Picture</label>
+          <input
+            type="file"
+            id="edit-picture"
+            accept="image/*"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
+          />
+        </div>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+        >
+          Save Changes
+        </button>
+      </form>
+    </div>
+
+    <script>
+      // Extract the user's name from the query parameters
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get('name') || 'User';
+
+      // Simulate fetching the user's profile picture and bio (replace with actual logic)
+      const profilePictureUrl = "/InkLink/img/default-profile.png"; // Replace with dynamic URL if available
+      const bio = "This is your bio. Click edit to update it!";
+
+      // Display the welcome message
+      const welcomeMessage = document.getElementById("welcome-message");
+      welcomeMessage.textContent = `Welcome, ${name}!`;
+
+      // After 2 seconds, animate the welcome message away and show the profile page
+      setTimeout(() => {
+        document.getElementById("welcome-container").classList.add("fade-out");
+        setTimeout(() => {
+          document.getElementById("welcome-container").classList.add("hidden");
+          const profileContainer = document.getElementById("profile-container");
+          profileContainer.classList.remove("hidden");
+
+          // Populate the profile page with the user's data
+          document.getElementById("profile-name").textContent = name;
+          document.getElementById("profile-picture").src = profilePictureUrl;
+          document.getElementById("profile-bio").textContent = bio;
+        }, 2000); // Match the animation duration
+      }, 2000);
+
+      // Handle Edit Profile button click
+      document.getElementById("edit-profile-btn").addEventListener("click", () => {
+        document.getElementById("edit-profile-form").classList.toggle("hidden");
+      });
+
+      // Handle Edit Profile form submission
+      document.getElementById("edit-profile-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Get updated values
+        const updatedName = document.getElementById("edit-name").value || name;
+        const updatedBio = document.getElementById("edit-bio").value || bio;
+        const updatedPicture = document.getElementById("edit-picture").files[0];
+
+        // Update the profile page
+        document.getElementById("profile-name").textContent = updatedName;
+        document.getElementById("profile-bio").textContent = updatedBio;
+
+        if (updatedPicture) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            document.getElementById("profile-picture").src = e.target.result;
+          };
+          reader.readAsDataURL(updatedPicture);
+        }
+
+        // Hide the form
+        document.getElementById("edit-profile-form").classList.add("hidden");
+      });
+    </script>
+  </body>
+</html>
