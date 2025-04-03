@@ -8,6 +8,7 @@ $(document).ready(function() {
             console.error("Error loading navbar: " + xhr.status + " " + xhr.statusText);
             return;
         }
+        $('#navbar-container nav').css('background-color', '#181818');
         // Once the navbar is loaded, initialize its functionalities
         initializeNavbar();
     });
