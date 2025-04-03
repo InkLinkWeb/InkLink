@@ -9,6 +9,7 @@
         <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
         <link rel="icon" type="image/x-icon" href="/InkLink/img/inkLinkLogo.png">
         <title>Ink Link - Login</title>
@@ -52,6 +53,7 @@
           </div>
         </div>
       </nav>
+      <!-- <div id="navbar-container"></div> -->
 
         <header class="text-center py-8">
             <h1 class="text-4xl font-sans-bold">Login</h1>
@@ -96,9 +98,9 @@
                 <legend class="flex text-md font-semibold mb-4 justify-center items-center py-1">Need to create an account?&nbsp;<a href = "signup.html" class="text-[#5cb8e4] hover:text-[#8758FF] transition">Sign Up</a></legend>
             </fieldset>
         </form>
-
+        <script type="module" src="./scripts/DropdownHandler.js"></script>
         <script type="module">
-            import { login, checkAuth } from "/InkLink/scripts/AccountHandler.js";
+            import { login, checkAuth } from "./scripts/AccountHandler.js";
             
             // Check if user is authenticated
             checkAuth((user) => {
@@ -118,6 +120,5 @@
                 login(email, password);
             });
         </script>
-        <script type="module" src="/InkLink/scripts/DropdownHandler.js"></script>
     </body>
 </html>
