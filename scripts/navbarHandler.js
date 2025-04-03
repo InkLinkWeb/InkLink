@@ -2,7 +2,7 @@ import { logout } from '/InkLink/scripts/AccountHandler.js';
 // Ensure the script runs after the DOM is fully loaded
 $(document).ready(function() {
     // Load the navbar HTML into the #navbar-container div
-    $('#navbar-container').load('/InkLink/navbar.html', function(response, status, xhr) {
+    $('#navbar-container').load('/InkLink/Navbar.html', function(response, status, xhr) {
         if (status === "error") {
             console.error("Error loading navbar: " + xhr.status + " " + xhr.statusText);
             return;
