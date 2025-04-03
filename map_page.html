@@ -6,9 +6,9 @@
   <title>Nearby Tattoo Artists</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Maps API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFE_nmnT9h9HwUFMidnmMuNlYDMRzF_2k"></script>
-  <link rel="icon" type="image/x-icon" href="/InkLink/img/inkLinkLogo.png">
+  <!-- Google Maps API with Places Library -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFE_nmnT9h9HwUFMidnmMuNlYDMRzF_2k&libraries=places" async defer></script>
+  <link rel="icon" type="image/x-icon" href="/img/inkLinkLogo.png">
 </head>
 
 <body class="bg-gray-100">
@@ -70,6 +70,12 @@
         <div class="mb-4">
           <label for="location" class="block text-gray-700 font-medium mb-2">Location</label>
           <input id="location" type="text" placeholder="Enter a location" class="w-full px-3 py-2 border rounded" />
+          <button
+            id="useCurrentLocation"
+            class="mt-2 w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded"
+          >
+            Use Current Location
+          </button>
         </div>
         <div class="mb-4">
           <label for="radius" class="block text-gray-700 font-medium mb-2">Radius (miles)</label>
@@ -89,7 +95,7 @@
   </main>
 
   <!-- External JavaScript file -->
-  <script src="/InkLink/scripts/map_script.js"></script>
-  <script type="module" src="/InkLink/scripts/DropdownHandler.js"></script>
+  <script src="/scripts/map_script.js"></script>
+  <script type="module" src="/scripts/DropdownHandler.js"></script>
 </body>
 </html>

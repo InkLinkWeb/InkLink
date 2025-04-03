@@ -51,6 +51,9 @@ function initMap() {
   });
 
   document.getElementById("applyFilters").addEventListener("click", searchLocation);
+
+  // Add event listener for the "Use Current Location" button
+  document.getElementById("useCurrentLocation").addEventListener("click", useCurrentLocation);
 }
 
 // Search for a location and center the map on it
@@ -84,6 +87,47 @@ function searchLocation() {
       console.error("Geocoding failed:", status);
     }
   });
+}
+
+// Use the user's current location
+function useCurrentLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+
+        // Center the map on the user's current location
+        map.setCenter(pos);
+
+        // Add a marker to show the user's current location
+        new google.maps.Marker({
+          position: pos,
+          map: map,
+          title: "Your Location",
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: "#4285F4",
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: "#ffffff",
+          },
+        });
+
+        // Update the radius and bounds
+        updateMapBounds(pos, parseFloat(document.getElementById("radius").value));
+      },
+      (error) => {
+        console.error("Error fetching current location:", error);
+        alert("Unable to fetch your current location. Please try again.");
+      }
+    );
+  } else {
+    alert("Geolocation is not supported by your browser.");
+  }
 }
 
 /**
