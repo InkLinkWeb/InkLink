@@ -40,7 +40,7 @@ export async function uploadImage(file, caption, style) {
         // Get download URL
         const downloadURL = await getDownloadURL(snapshot.ref);
         // Define a reference for the document in the images subcollection of the user document
-        const imagesCollectionRef = collection(db, "default", userId, "images");
+        const imagesCollectionRef = collection(db, "users", userId, "images");
         // Use setDoc to create the image document
         await setDoc(doc(imagesCollectionRef, fileName), {
             caption: caption,
