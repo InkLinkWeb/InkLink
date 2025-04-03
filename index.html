@@ -17,7 +17,7 @@
 
     <body class="min-h-screen bg-[#F2F2F2]">
         <!-- Navbar without extra padding or margin -->
-      <nav class="bg-[#181818] w-full">
+      <!-- <nav class="bg-[#181818] w-full">
         <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div class="relative flex h-16 items-center justify-between">
             <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -52,8 +52,8 @@
             </div>
           </div>
         </div>
-      </nav>
-      <!-- <div id="navbar-container"></div> -->
+      </nav> -->
+      <div id="navbar-container"></div>
 
         <header class="text-center py-8">
             <h1 class="text-4xl font-sans-bold">Login</h1>
@@ -98,7 +98,8 @@
                 <legend class="flex text-md font-semibold mb-4 justify-center items-center py-1">Need to create an account?&nbsp;<a href = "signup.html" class="text-[#5cb8e4] hover:text-[#8758FF] transition">Sign Up</a></legend>
             </fieldset>
         </form>
-        <script type="module" src="./scripts/DropdownHandler.js"></script>
+        <script type="module" src="./scripts/navbarHandler.js"></script>
+        <!-- <script type="module" src="./scripts/DropdownHandler.js"></script> -->
         <script type="module">
             import { login, checkAuth } from "./scripts/AccountHandler.js";
             
