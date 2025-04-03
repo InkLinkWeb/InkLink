@@ -35,29 +35,55 @@ function initMap() {
             strokeColor: "#ffffff",
           },
         });
-
-        // On load, generate markers for the initial radius.
-        currentRadius = 0; // reset current radius
-        const initialRadius = parseFloat(document.getElementById("radius").value);
-        // For initial load, generate markers for the entire radius.
-        fetchArtists(pos, initialRadius);
-        updateMapBounds(pos, initialRadius);
       },
       () => {
-        // If geolocation fails, use the default location.
-        currentRadius = 0;
-        const initialRadius = parseFloat(document.getElementById("radius").value);
-        fetchArtists(defaultLocation, initialRadius);
-        updateMapBounds(defaultLocation, initialRadius);
+        console.warn("Geolocation failed. Using default location.");
       }
     );
-  } else {
-    // If browser doesn't support geolocation, use default location.
-    currentRadius = 0;
-    const initialRadius = parseFloat(document.getElementById("radius").value);
-    fetchArtists(defaultLocation, initialRadius);
-    updateMapBounds(defaultLocation, initialRadius);
   }
+
+  // Add event listener for the location search bar
+  document.getElementById("location").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent form submission
+      searchLocation();
+    }
+  });
+
+  document.getElementById("applyFilters").addEventListener("click", searchLocation);
+}
+
+// Search for a location and center the map on it
+function searchLocation() {
+  const locationInput = document.getElementById("location").value;
+
+  if (!locationInput) {
+    alert("Please enter a location.");
+    return;
+  }
+
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ address: locationInput }, (results, status) => {
+    if (status === "OK" && results[0]) {
+      const location = results[0].geometry.location;
+
+      // Center the map on the new location
+      map.setCenter(location);
+
+      // Optionally add a marker at the new location
+      new google.maps.Marker({
+        position: location,
+        map: map,
+        title: results[0].formatted_address,
+      });
+
+      // Update the map bounds to fit the new location
+      updateMapBounds(location, parseFloat(document.getElementById("radius").value));
+    } else {
+      alert("Location not found. Please try again.");
+      console.error("Geocoding failed:", status);
+    }
+  });
 }
 
 /**
@@ -171,21 +197,6 @@ function clearMarkers() {
 // Update the radius display as the slider changes.
 document.getElementById("radius").addEventListener("input", function () {
   document.getElementById("radiusValue").textContent = this.value + " miles";
-});
-
-// When the "Apply Filters" button is clicked.
-document.getElementById("applyFilters").addEventListener("click", function () {
-  const targetRadius = parseFloat(document.getElementById("radius").value);
-  const location = map.getCenter();
-  if (targetRadius < currentRadius) {
-    // If the new radius is smaller, remove markers outside the new radius.
-    removeMarkersOutside(location, targetRadius);
-    currentRadius = targetRadius;
-  } else if (targetRadius > currentRadius) {
-    // If the new radius is larger, add markers for the annular region.
-    fetchArtists(location, targetRadius);
-  }
-  updateMapBounds(location, targetRadius);
 });
 
 // Initialize the map when the window loads.
