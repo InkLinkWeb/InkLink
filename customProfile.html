@@ -48,6 +48,14 @@
         Edit Profile
       </button>
 
+      <!-- Sign out button -->
+      <button
+        id="signout-button"
+        class="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+      >
+        Sign Out
+      </button>
+
       <!-- Edit Profile Form -->
       <form id="edit-profile-form" class="hidden mt-6 space-y-4">
         <div>
@@ -83,14 +91,53 @@
       </form>
     </div>
 
-    <script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCJJatBLi5cR_GRhbsHQ5SdzlAW3bOswzU",
+        authDomain: "inklinkweb.firebaseapp.com",
+        projectId: "inklinkweb",
+        storageBucket: "inklinkweb.firebasestorage.app",
+        messagingSenderId: "932046606000",
+        appId: "1:932046606000:web:bae7db8b2929df69413575"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+
+      // Redirect to login page if not logged in
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          window.location.href = "index.html"; // Redirect to login page if not logged in
+        }
+      });
+
+      // Add event listener to the sign-out button
+      document.getElementById("signout-button").addEventListener("click", async () => {
+        const confirmSignOut = confirm("Are you sure you want to sign out?");
+        if (confirmSignOut) {
+          try {
+            await signOut(auth);
+            window.location.href = "index.html";
+          } catch (error) {
+            console.error("Error signing out:", error);
+            alert("An error occurred while signing out. Please try again.");
+          }
+        }
+      });
+
       // Extract the user's name from the query parameters
       const params = new URLSearchParams(window.location.search);
-      const name = params.get('name') || 'User';
+      const name = params.get("name") || "User";
 
       // Simulate fetching the user's profile picture and bio (replace with actual logic)
-      const profilePictureUrl = "/InkLink/img/default-profile.png"; // Replace with dynamic URL if available
-      const bio = "This is your bio. Click edit to update it!";
+      const defaultProfilePictureUrl = "/img/default-profile.png";
 
       // Display the welcome message
       const welcomeMessage = document.getElementById("welcome-message");
@@ -105,9 +152,23 @@
           profileContainer.classList.remove("hidden");
 
           // Populate the profile page with the user's data
-          document.getElementById("profile-name").textContent = name;
-          document.getElementById("profile-picture").src = profilePictureUrl;
-          document.getElementById("profile-bio").textContent = bio;
+          onAuthStateChanged(auth, async (user) => {
+            if (user) {
+              const userDoc = doc(db, "users", user.uid);
+              const userSnapshot = await getDoc(userDoc);
+
+              if (userSnapshot.exists()) {
+                const userData = userSnapshot.data();
+                console.log("User Data:", userData);
+                // Access fields like userData.name, userData.bio, userData.profilePicture
+                document.getElementById("profile-name").textContent = userData.name || name;
+                document.getElementById("profile-bio").textContent = userData.bio || "This is your bio. Click edit to update it!";
+                document.getElementById("profile-picture").src = userData.profilePicture || defaultProfilePictureUrl;
+              } else {
+                console.log("No such user document!");
+              }
+            }
+          });
         }, 2000); // Match the animation duration
       }, 2000);
 
@@ -117,28 +178,57 @@
       });
 
       // Handle Edit Profile form submission
-      document.getElementById("edit-profile-form").addEventListener("submit", (e) => {
+      document.getElementById("edit-profile-form").addEventListener("submit", async (e) => {
         e.preventDefault();
 
         // Get updated values
-        const updatedName = document.getElementById("edit-name").value || name;
-        const updatedBio = document.getElementById("edit-bio").value || bio;
+        const updatedName = document.getElementById("edit-name").value;
+        const updatedBio = document.getElementById("edit-bio").value;
         const updatedPicture = document.getElementById("edit-picture").files[0];
 
-        // Update the profile page
-        document.getElementById("profile-name").textContent = updatedName;
-        document.getElementById("profile-bio").textContent = updatedBio;
-
-        if (updatedPicture) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            document.getElementById("profile-picture").src = e.target.result;
-          };
-          reader.readAsDataURL(updatedPicture);
+        // Get the current user
+        const user = auth.currentUser;
+        if (!user) {
+          alert("You must be logged in to edit your profile.");
+          return;
         }
 
-        // Hide the form
-        document.getElementById("edit-profile-form").classList.add("hidden");
+        // Save updated data to Firestore
+        const userDoc = doc(db, "users", user.uid);
+        const updatedData = {
+          name: updatedName,
+          bio: updatedBio,
+        };
+
+        if (updatedPicture) {
+          // Upload the profile picture to Firebase Storage (optional)
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            updatedData.profilePicture = e.target.result;
+
+            // Save to Firestore
+            await setDoc(userDoc, updatedData, { merge: true });
+
+            // Update the profile page
+            document.getElementById("profile-name").textContent = updatedName;
+            document.getElementById("profile-bio").textContent = updatedBio;
+            document.getElementById("profile-picture").src = e.target.result;
+
+            // Hide the form
+            document.getElementById("edit-profile-form").classList.add("hidden");
+          };
+          reader.readAsDataURL(updatedPicture);
+        } else {
+          // Save to Firestore without a new picture
+          await setDoc(userDoc, updatedData, { merge: true });
+
+          // Update the profile page
+          document.getElementById("profile-name").textContent = updatedName;
+          document.getElementById("profile-bio").textContent = updatedBio;
+
+          // Hide the form
+          document.getElementById("edit-profile-form").classList.add("hidden");
+        }
       });
     </script>
   </body>

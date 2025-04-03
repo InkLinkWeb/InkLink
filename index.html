@@ -44,7 +44,7 @@
                   </button>
                 </div>
                 <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden hidden" id="user-menu" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                  <a href="/InkLink/customProfile.html" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+                  <a href="/customProfile.html" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
                   <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
                   <a href="#" id="signout-button" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
                 </div>
@@ -105,19 +105,40 @@
             // Check if user is authenticated
             checkAuth((user) => {
                 if (user) {
-                    window.location.href = "gallery.html";  // Redirect if user is logged in
+                    // If a user is already logged in, show a message or allow them to log out
+                    const alreadyLoggedInMessage = document.createElement("div");
+                    alreadyLoggedInMessage.className = "text-center text-gray-700 mb-4";
+                    alreadyLoggedInMessage.innerHTML = `
+                        <p>You are already logged in as <strong>${user.email}</strong>.</p>
+                        <button id="logout-button" class="text-[#5cb8e4] hover:text-[#8758FF] transition">Log out</button>
+                    `;
+                    document.querySelector("form").prepend(alreadyLoggedInMessage);
+
+                    // Add event listener to the logout button
+                    document.getElementById("logout-button").addEventListener("click", async () => {
+                        await signOut(auth);
+                        window.location.reload(); // Reload the page to allow a new login
+                    });
                 }
             });
-            
+
             // Listen for the login form submission
             document.getElementById("loginform").addEventListener("submit", async (event) => {
-                event.preventDefault();  // Prevent form from refreshing the page
-        
+                event.preventDefault(); // Prevent form from refreshing the page
+
                 const email = document.getElementById("email").value;
                 const password = document.getElementById("password").value;
-        
+
                 // Attempt to log in
-                login(email, password);
+                try {
+                    await login(email, password);
+                    window.location.href = "customProfile.html"; // Redirect to the profile page after successful login
+                } catch (error) {
+                    const errorMessage = document.createElement("p");
+                    errorMessage.className = "text-red-500 text-center mt-4";
+                    errorMessage.textContent = error.message;
+                    document.querySelector("form").appendChild(errorMessage);
+                }
             });
         </script>
     </body>
