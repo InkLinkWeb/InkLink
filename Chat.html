@@ -6,21 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="icon" type="image/x-icon" href="/InkLink/img/inkLinkLogo.png">
     <title>Ink Link - Chat</title>
 </head>
 
 <body class="min-h-screen bg-[#F2F2F2]">
-    <nav class="fixed top-0 left-0 w-full bg-[#181818]">
-        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div class="relative flex h-16 items-center justify-between">
-                <div class="flex items-center">
-                    <img class="h-10 w-auto" src="img/inkLinkLogo.png" alt="Ink Link">
-                    <span class="text-white text-xl ml-4">Chat</span>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div id="navbar-container"></div>
 
     <div class="flex h-screen pt-16">
         <!-- Left Sidebar - User List -->
@@ -82,7 +74,7 @@
             document.getElementById("profile-popup").classList.add("hidden");
         }
     </script>
-    <script type="module" src="/InkLink/scripts/DropdownHandler.js"></script>
+    <script type="module" src="./scripts/navbarHandler.js"></script>
 </body>
 
 </html>

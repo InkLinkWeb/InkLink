@@ -10,53 +10,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="icon" type="image/x-icon" href="/InkLink/img/inkLinkLogo.png">
         <title>Ink Link</title>
     </head>
     <!-- Copied over from seb's login form.
         I was able to fix the nav bar-->
     <body class="min-h-screen bg-[#F2F2F2]">
-        <nav class=" fixed top-0 left-0 w-full bg-[#181818]">
-            <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-              <div class="relative flex h-16 items-center justify-between">
-                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                  <div class="flex shrink-0 items-center">
-                    <img class="h-10 w-auto" src="img/inkLinkLogo.png" alt="Ink Link">
-                  </div>
-                  <div class="hidden sm:ml-6 sm:block">
-                    <div class="flex space-x-4">
-                      <!-- links to different pages, add bg-[#5CB8E4] when its the page user is currently on -->
-                      <a href="gallery.html" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Explore</a>
-                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Chat</a>
-                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Booking</a>
-                      <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Support</a>
-                      <a href="testingpost.html" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Testing</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  <!-- Profile dropdown -->
-                  <div class="relative ml-3">
-                    <div>
-                      <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-[#8758FF] focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden" data-dropdown-toggle="user-menu" id="user-menu-button" aria-expanded="true" aria-haspopup="true">
-                        <span class="absolute -inset-1.5"></span>
-                        <span class="sr-only">Open user menu</span>
-                        <img class="h-12 w-12 object-fit-cover rounded-full" src="img/inkLinkLogo.png" alt="temp image">
-                      </button>
-                    </div>
-          
-                    <!-- Dropdown menu -->
-                    <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden hidden" id="user-menu" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                      <!-- Active: "bg-gray-100 outline-hidden", Not Active: "" -->
-                      <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                      <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-                      <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </nav>
+        <div id="navbar-container"></div>
 
         <div class="h-screen w-full overflow-y-auto snap-y snap-mandatory">
             <!-- Hero Section -->
@@ -110,6 +71,6 @@
                       }
               });
           </script>
-          <script type="module" src="/InkLink/scripts/DropdownHandler.js"></script>
+          <script type="module" src="./scripts/navbarHandler.js"></script>
     </body>
 </html>

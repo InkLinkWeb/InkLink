@@ -4,48 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Sign Up</title>
     <link rel="icon" type="image/x-icon" href="/InkLink/img/inkLinkLogo.png">
   </head>
   
   <body class="bg-[#F2F2F2] min-h-screen flex flex-col m-0">
-    <!-- Navbar without extra padding or margin -->
-    <!-- <nav class="bg-[#181818] w-full">
-      <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div class="relative flex h-16 items-center justify-between">
-          <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div class="flex shrink-0 items-center">
-              <img class="h-10 w-auto" src="/InkLink/img/inkLinkLogo.png" alt="Ink Link">
-            </div>
-            <div class="hidden sm:ml-6 sm:block">
-              <div class="flex space-x-4">
-                <a href="gallery.html" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Explore</a>
-                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Chat</a>
-                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Booking</a>
-                <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Support</a>
-                <a href="testingpost.html" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Testing</a>
-              </div>
-            </div>
-          </div>
-          <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <div class="relative ml-3">
-              <div>
-                <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-[#8758FF] focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden" data-dropdown-toggle="user-menu" id="user-menu-button" aria-expanded="true" aria-haspopup="true">
-                  <span class="absolute -inset-1.5"></span>
-                  <span class="sr-only">Open user menu</span>
-                  <img class="h-12 w-12 object-fit-cover rounded-full" src="/InkLink/img/inkLinkLogo.png" alt="temp image">
-                </button>
-              </div>
-              <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-hidden hidden" id="user-menu" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav> -->
     <div id="navbar-container"></div>
 
     <!-- Main content for signup, with its own padding -->
@@ -175,6 +139,6 @@
         }
       });
     </script>
-    <!-- <script type="module" src="/scripts/DropdownHandler.js"></script> -->
+    <script type="module" src="./scripts/navbarHandler.js"></script>
   </body>
 </html>
