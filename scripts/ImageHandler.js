@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, collection, getDoc, addDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Firebase configuration
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,7 +23,7 @@ const db = getFirestore(app);
 console.log('Firestore initialized:', db);
 
 // Function to upload an image
-export async function uploadImage(file, caption, tattooStyle) {
+export async function uploadImage(file, caption, style) {
     const user = auth.currentUser;
     if (!user) {
         alert("You must be logged in to upload images.");
@@ -39,15 +39,16 @@ export async function uploadImage(file, caption, tattooStyle) {
         console.log("File uploaded:", snapshot);
         // Get download URL
         const downloadURL = await getDownloadURL(snapshot.ref);
-        // Generate a new document reference for the image under the user's images collection
-        const imageRef = collection(db, `users/${userId}/images`);
-        const imageDoc = await addDoc(imageRef, {
+        // Define a reference for the document in the images subcollection of the user document
+        const imagesCollectionRef = collection(db, "default", userId, "images");
+        // Use setDoc to create the image document
+        await setDoc(doc(imagesCollectionRef, fileName), {
             caption: caption,
-            tattooStyle: tattooStyle.toLowerCase(),
+            style: style.toLowerCase(),
             imageUrl: downloadURL,
             timestamp: serverTimestamp()
         });
-        console.log("Image metadata saved to Firestore.");
+        console.log("Image metadata saved to Firestore with document ID:", fileName);
         alert("Image uploaded successfully!");
     } catch (error) {
         console.error("Upload error:", error.message);
