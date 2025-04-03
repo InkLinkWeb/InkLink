@@ -98,7 +98,7 @@
         </form>
 
         <script type="module">
-            import { login, checkAuth } from "/scripts/AccountHandler.js";
+            import { login, checkAuth } from "/InkLink/scripts/AccountHandler.js";
             
             // Check if user is authenticated
             checkAuth((user) => {
@@ -118,6 +118,6 @@
                 login(email, password);
             });
         </script>
-        <script type="module" src="/scripts/DropdownHandler.js"></script>
+        <script type="module" src="/InkLink/scripts/DropdownHandler.js"></script>
     </body>
 </html>
