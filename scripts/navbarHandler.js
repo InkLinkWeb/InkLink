@@ -1,4 +1,4 @@
-import { logout } from '/AccountHandler.js';
+import { logout } from '/InkLink/scripts/AccountHandler.js';
 // Ensure the script runs after the DOM is fully loaded
 $(document).ready(function() {
     // Load the navbar HTML into the #navbar-container div
