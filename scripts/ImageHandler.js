@@ -22,6 +22,8 @@ const auth = getAuth(app);
 const db = getFirestore(app, 'gallerydata');
 console.log('Firestore initialized:', db);
 
+
+let batchSize = 10;
 export let lastImageLoaded = null;
 
 // Function to upload an image
