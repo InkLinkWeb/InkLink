@@ -88,32 +88,28 @@
                     populateTagFilter();  // Populate tag dropdown
                     fetchImages();  // Fetch and display images initially
                 });
-            
-                // Inside the tag selection change handler
+                // tag selection handler
                 document.getElementById('tag-filter').addEventListener('change', (event) => {
                     const selectedTag = event.target.value;
-                    // Prevent redundant fetch if one is already loading
                     if (loading) return;
-                    loading = true; // Set loading flag
+                    loading = true;
                     // Fetch and append new images based on the selected tag
-                    fetchImages(selectedTag).finally(() => {
+                    filterImagesByTag(event).finally(() => {
                         loading = false; // Reset loading flag once fetch is complete
                     });
                 });
-                // Inside the "Load More" button handler
+                // Load More button handler
                 document.getElementById('load-more-btn').addEventListener('click', () => {
-                    // Prevent redundant fetch if one is already loading
                     if (loading) return;
-
-                    loading = true; // Set loading flag
+                    loading = true;
                     const selectedTag = document.getElementById('tag-filter').value;
-
                     // Fetch and append more images when clicking the "Load More" button
                     fetchImages(selectedTag).finally(() => {
                         loading = false; // Reset loading flag once fetch is complete
                     });
                 });
             </script>
+            
             
             
             

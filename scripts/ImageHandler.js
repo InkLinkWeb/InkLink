@@ -139,6 +139,9 @@ export async function filterImagesByTag(event) {
     const selectedTag = event.target.value;
     // Clear the current gallery
     $('#gallery').empty();
+    lastImageLoaded = null; // Reset pagination when a new tag is selected
+    // Hide the "Load More" button when filtering by a tag
+    document.getElementById('load-more-btn').style.display = 'none';
     // Fetch images with the selected tag
     fetchImages(selectedTag);
 }
