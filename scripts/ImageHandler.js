@@ -137,11 +137,14 @@ export async function populateTagFilter() {
 // Function to handle tag filter change
 export async function filterImagesByTag(event) {
     const selectedTag = event.target.value;
+    const scrollPosition = window.scrollY;
     // Clear the current gallery
     $('#gallery').empty();
     lastImageLoaded = null; // Reset pagination when a new tag is selected
     // Hide the "Load More" button when filtering by a tag
     document.getElementById('load-more-btn').style.display = 'none';
     // Fetch images with the selected tag
-    fetchImages(selectedTag);
+    await fetchImages(selectedTag);
+    // Restore the scroll position
+    window.scrollTo(0, scrollPosition);
 }
