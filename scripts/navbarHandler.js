@@ -9,7 +9,8 @@ $(document).ready(function() {
             return;
         }
         $('#navbar-container nav').css('background-color', '#181818');
-        $('#navbar-container nav').addClass('sticky top-0 z-50');
+        $('#navbar-container nav').css('top', '0');
+        $('#navbar-container nav').css('position', 'sticky');
         // Once the navbar is loaded, initialize its functionalities
         initializeNavbar();
     });
