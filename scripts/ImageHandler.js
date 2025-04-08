@@ -88,6 +88,8 @@ export async function fetchImages(selectedTag = null) {
                 const imageName = data.name;
                 const imageTags = data.tags.join(', ');
                 // Generate HTML for each image
+                // We probably shouldn't be displaying the tags under each image
+                // It is good for testing but we should change before demo
                 const imageElement = `
                     <div class="gallery-item">
                         <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md">
