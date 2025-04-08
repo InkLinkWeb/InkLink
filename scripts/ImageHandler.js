@@ -110,7 +110,7 @@ export async function fetchImages(selectedTag = null) {
 // Function to fetch unique tags from Firestore and populate the dropdown
 export async function populateTagFilter() {
     const tagsSet = new Set();
-    const imagesRef = collection(db, 'scraped-images');
+    const imagesRef = collection(db, 'scrapedimages');
     const q = query(imagesRef);
     const snapshot = await getDocs(q);
 
@@ -126,4 +126,13 @@ export async function populateTagFilter() {
         option.textContent = tag;
         tagFilter.appendChild(option);
     });
+}
+
+// Function to handle tag filter change
+export async function filterImagesByTag(event) {
+    const selectedTag = event.target.value;
+    // Clear the current gallery
+    $('#gallery').empty();
+    // Fetch images with the selected tag
+    fetchImages(selectedTag);
 }

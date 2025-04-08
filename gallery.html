@@ -51,7 +51,7 @@
                 </div>
             </section> -->
 
-            <section id="filter-section" class="w-full bg-white pt-6">
+            <section id="filter-section" class="w-full bg-white pt-6" onload="filterImagesByTag(event);">
                 <div class="text-center mb-4">
                     <label for="tag-filter" class="text-lg font-semibold">Filter by Tag:</label>
                     <select id="tag-filter" class="ml-2 p-2 border rounded">
@@ -73,11 +73,11 @@
             </section>
 
             <script type="module" src="./scripts/ImageHandler.js">
-                import { fetchImages, populateTags } from './scripts/ImageHandler.js';
+                import { fetchImages, populateTagFilter,  filterImagesByTag} from './scripts/ImageHandler.js';
     
                 // Initialize the gallery and populate tags
                 document.addEventListener('DOMContentLoaded', () => {
-                    populateTags(); // Populate tag dropdown
+                    populateTagFilter(); // Populate tag dropdown
                     fetchImages();  // Fetch and display images
                 });
 
