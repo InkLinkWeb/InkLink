@@ -75,7 +75,7 @@
             <script type="module">
                 import { fetchImages, populateTagFilter,  filterImagesByTag} from './scripts/ImageHandler.js';
                 console.log("ImageHandler.js is loaded");
-                
+
                 // Initialize the gallery and populate tags
                 document.addEventListener('DOMContentLoaded', () => {
                     populateTagFilter(); // Populate tag dropdown
@@ -108,7 +108,7 @@
                   if (!user) {
                   // Redirect to login page if not authenticated
                       console.log('User not authenticated, redirecting to login page.');
-                      window.location.href = '/index.html'; // Redirect to login page
+                      window.location.href = './index.html'; // Redirect to login page
                       }
               });
           </script>
