@@ -12,6 +12,7 @@ $(document).ready(function() {
             'background-color': '#181818',
             'position': 'sticky',
             'top': '0',
+            'overflow': 'hidden',
             'z-index': '50'
         });
         // Once the navbar is loaded, initialize its functionalities
