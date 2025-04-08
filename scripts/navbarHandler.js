@@ -8,9 +8,12 @@ $(document).ready(function() {
             console.error("Error loading navbar: " + xhr.status + " " + xhr.statusText);
             return;
         }
-        $('#navbar-container nav').css('background-color', '#181818');
-        $('#navbar-container nav').css('top', '0');
-        $('#navbar-container nav').css('position', 'sticky');
+        $('#navbar-container nav').css({
+            'background-color': '#181818',
+            'position': 'sticky',
+            'top': '0',
+            'z-index': '50'
+        });
         // Once the navbar is loaded, initialize its functionalities
         initializeNavbar();
     });
