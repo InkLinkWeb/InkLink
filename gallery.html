@@ -19,7 +19,7 @@
     <body class="min-h-screen bg-[#F2F2F2]">
         <div id="navbar-container"></div>
 
-        <div class="h-screen w-full overflow-y-auto snap-y snap-mandatory">
+        <div class="h-screen w-full snap-y snap-mandatory">
             <!-- Hero Section -->
             <section class="relative w-full h-screen bg-cover bg-center flex items-center justify-center text-white snap-start" 
                 style="background-image: url('img/pexels-photo-2183131.jpeg');">
@@ -66,14 +66,14 @@
                 <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
                     <!-- Images will be dynamically inserted here -->
                 </div>
+                <!-- Load more button -->
+                <div class="text-center mt-6">
+                    <button id="load-more-btn" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition">
+                    Load More
+                    </button>
+                </div>
             </section>
 
-            <!-- Load more button -->
-            <div class="text-center mt-6">
-                <button id="load-more-btn" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition">
-                    Load More
-                </button>
-        </div>
             <section class="snap-start">
 
             </section>
@@ -89,29 +89,26 @@
                     fetchImages();  // Fetch and display images initially
                 });
             
-                // Add event listener for tag selection
+                // Inside the tag selection change handler
                 document.getElementById('tag-filter').addEventListener('change', (event) => {
                     const selectedTag = event.target.value;
-                    
                     // Prevent redundant fetch if one is already loading
                     if (loading) return;
-            
                     loading = true; // Set loading flag
-            
-                    document.getElementById('gallery').innerHTML = ''; // Clear current gallery
+                    // Fetch and append new images based on the selected tag
                     fetchImages(selectedTag).finally(() => {
                         loading = false; // Reset loading flag once fetch is complete
                     });
                 });
-            
-                // Add event listener for "Load More" button
+                // Inside the "Load More" button handler
                 document.getElementById('load-more-btn').addEventListener('click', () => {
                     // Prevent redundant fetch if one is already loading
                     if (loading) return;
-            
+
                     loading = true; // Set loading flag
                     const selectedTag = document.getElementById('tag-filter').value;
-                    
+
+                    // Fetch and append more images when clicking the "Load More" button
                     fetchImages(selectedTag).finally(() => {
                         loading = false; // Reset loading flag once fetch is complete
                     });
