@@ -72,9 +72,10 @@
 
             </section>
 
-            <script type="module" src="./scripts/ImageHandler.js">
+            <script type="module">
                 import { fetchImages, populateTagFilter,  filterImagesByTag} from './scripts/ImageHandler.js';
-    
+                console.log("ImageHandler.js is loaded");
+                
                 // Initialize the gallery and populate tags
                 document.addEventListener('DOMContentLoaded', () => {
                     populateTagFilter(); // Populate tag dropdown
@@ -96,7 +97,7 @@
                     }
                 });
             </script>
-            <script type = "module" src = "scripts/AccountHandler.js">
+            <script type = "module">
               import { 
                   checkAuth, 
                   logout 

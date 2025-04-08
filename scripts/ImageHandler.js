@@ -63,6 +63,7 @@ export async function uploadImage(file, caption, style) {
 
 // Function to fetch images from Firestore
 export async function fetchImages(selectedTag = null) {
+    console.log("Fetching images with tag:", selectedTag);
     if (loading) return;
     loading = true;
 
