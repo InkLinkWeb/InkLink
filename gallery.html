@@ -79,7 +79,9 @@
             </section>
 
             <script type="module">
-                import { fetchImages, populateTagFilter, filterImagesByTag } from './scripts/ImageHandler.js';
+                import { fetchImages, populateTagFilter, filterImagesByTag, lastImageLoaded } from './scripts/ImageHandler.js';
+            
+                let loading = false; // Flag to prevent multiple fetches at the same time
             
                 // Initialize the gallery and populate tags
                 document.addEventListener('DOMContentLoaded', () => {
@@ -90,16 +92,32 @@
                 // Add event listener for tag selection
                 document.getElementById('tag-filter').addEventListener('change', (event) => {
                     const selectedTag = event.target.value;
+                    
+                    // Prevent redundant fetch if one is already loading
+                    if (loading) return;
+            
+                    loading = true; // Set loading flag
+            
                     document.getElementById('gallery').innerHTML = ''; // Clear current gallery
-                    fetchImages(selectedTag); // Fetch images based on selected tag
+                    fetchImages(selectedTag).finally(() => {
+                        loading = false; // Reset loading flag once fetch is complete
+                    });
                 });
             
                 // Add event listener for "Load More" button
                 document.getElementById('load-more-btn').addEventListener('click', () => {
+                    // Prevent redundant fetch if one is already loading
+                    if (loading) return;
+            
+                    loading = true; // Set loading flag
                     const selectedTag = document.getElementById('tag-filter').value;
-                    fetchImages(selectedTag);  // Fetch more images starting from the last loaded image
+                    
+                    fetchImages(selectedTag).finally(() => {
+                        loading = false; // Reset loading flag once fetch is complete
+                    });
                 });
             </script>
+            
             
             
             <script type = "module">
