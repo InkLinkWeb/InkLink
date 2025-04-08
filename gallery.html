@@ -38,24 +38,64 @@
 
             <!-- Gallery Section -->
             <!-- Gallery Section -->
-            <section id="gallery" class="w-full min-h-[300vh] bg-white pt-16 snap-start">
+            <!-- <section id="gallery-section" class="w-full min-h-[300vh] bg-white pt-16 snap-start">
                 <h2 class="text-3xl font-bold text-center mb-6">Gallery</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
+                <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4"> -->
                     <!--Updated images from the gallery-fake folder-->
-                    <img src="img\Gallery-Fake\9fb39d408f5c65e5005191ebcbe2d91e.jpg" alt="Gallery Image 1" class="w-full h-auto rounded-lg shadow-md">
+                    <!-- <img src="img\Gallery-Fake\9fb39d408f5c65e5005191ebcbe2d91e.jpg" alt="Gallery Image 1" class="w-full h-auto rounded-lg shadow-md">
                     <img src="img\Gallery-Fake\90204-scaled.jpg" alt="Gallery Image 2" class="w-full h-auto rounded-lg shadow-md">
                     <img src="img\Gallery-Fake\20220318_cGSxKUkfCdh7W3C.webp" alt="Gallery Image 3" class="w-full h-auto rounded-lg shadow-md">
                     <img src="img\Gallery-Fake\29401682_159791824641126_3376949484230541312_n-8b07fc21c14c4071b8cacd7fa68d918c.jpg" alt="Gallery Image 4" class="w-full h-auto rounded-lg shadow-md">
                     <img src="img\Gallery-Fake\117628460.webp" alt="Gallery Image 5" class="w-full h-auto rounded-lg shadow-md">
                     <img src="img\Gallery-Fake\230106141452-02-chen-jie.jpg" alt="Gallery Image 6" class="w-full h-auto rounded-lg shadow-md">
                 </div>
-            </section>
+            </section> -->
 
+            <section id="filter-section" class="w-full bg-white pt-6">
+                <div class="text-center mb-4">
+                    <label for="tag-filter" class="text-lg font-semibold">Filter by Tag:</label>
+                    <select id="tag-filter" class="ml-2 p-2 border rounded">
+                        <option value="">All</option>
+                        <!-- Options will be dynamically populated -->
+                    </select>
+                </div>
+            </section>
+            
+            <section id="gallery-section" class="w-full bg-white pt-6">
+                <h2 class="text-3xl font-bold text-center mb-6">Gallery</h2>
+                <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
+                    <!-- Images will be dynamically inserted here -->
+                </div>
+            </section>
         </div>
             <section class="snap-start">
 
             </section>
 
+            <script type="module" src="./scripts/ImageHandler.js">
+                import { fetchImages, populateTags } from './scripts/ImageHandler.js';
+    
+                // Initialize the gallery and populate tags
+                document.addEventListener('DOMContentLoaded', () => {
+                    populateTags(); // Populate tag dropdown
+                    fetchImages();  // Fetch and display images
+                });
+
+                // Add event listener for tag selection
+                document.getElementById('tag-filter').addEventListener('change', (event) => {
+                    const selectedTag = event.target.value;
+                    document.getElementById('gallery').innerHTML = ''; // Clear current gallery
+                    fetchImages(selectedTag); // Fetch images based on selected tag
+                });
+
+                // Infinite scroll listener
+                window.addEventListener('scroll', () => {
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+                        const selectedTag = document.getElementById('tag-filter').value;
+                        fetchImages(selectedTag);
+                    }
+                });
+            </script>
             <script type = "module" src = "scripts/AccountHandler.js">
               import { 
                   checkAuth, 
