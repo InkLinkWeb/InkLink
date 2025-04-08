@@ -80,69 +80,27 @@
 
             <script type="module">
                 import { fetchImages, populateTagFilter, filterImagesByTag } from './scripts/ImageHandler.js';
-                let lastImageLoaded = null;  // Track the last loaded image
-    
+            
                 // Initialize the gallery and populate tags
                 document.addEventListener('DOMContentLoaded', () => {
                     populateTagFilter();  // Populate tag dropdown
                     fetchImages();  // Fetch and display images initially
                 });
-    
+            
                 // Add event listener for tag selection
                 document.getElementById('tag-filter').addEventListener('change', (event) => {
                     const selectedTag = event.target.value;
                     document.getElementById('gallery').innerHTML = ''; // Clear current gallery
-                    lastImageLoaded = null; // Reset the last image loaded
                     fetchImages(selectedTag); // Fetch images based on selected tag
                 });
-    
+            
                 // Add event listener for "Load More" button
                 document.getElementById('load-more-btn').addEventListener('click', () => {
                     const selectedTag = document.getElementById('tag-filter').value;
-                    fetchImages(selectedTag); // Load more images when button is clicked
+                    fetchImages(selectedTag);  // Fetch more images starting from the last loaded image
                 });
-    
-                // Updated fetchImages function to append more images
-                function fetchImages(selectedTag = '') {
-                    let query = firebase.firestore().collection('images').orderBy('timestamp').limit(6);
-                    
-                    // If there's a last loaded image, use it for pagination
-                    if (lastImageLoaded) {
-                        query = query.startAfter(lastImageLoaded);
-                    }
-    
-                    if (selectedTag) {
-                        query = query.where('tags', 'array-contains', selectedTag);
-                    }
-    
-                    query.get().then(snapshot => {
-                        snapshot.forEach(doc => {
-                            const data = doc.data();
-                            const imageUrl = data.url;
-                            const imageName = data.name;
-                            const imageTags = data.tags.join(', ');
-                            const imageElement = `
-                                <div class="gallery-item">
-                                    <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md">
-                                    <p class="tags">${imageTags}</p>
-                                </div>`;
-                            $('#gallery').append(imageElement);
-                        });
-    
-                        // Update last image loaded for pagination
-                        if (!snapshot.empty) {
-                            lastImageLoaded = snapshot.docs[snapshot.docs.length - 1];
-                        }
-    
-                        // Hide the "Load More" button if there are no more images
-                        if (snapshot.empty) {
-                            $('#load-more-btn').hide();
-                        }
-                    }).catch(error => {
-                        console.error('Error fetching images:', error);
-                    });
-                }
             </script>
+            
             
             <script type = "module">
               import { 
