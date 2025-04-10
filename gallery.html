@@ -35,6 +35,15 @@
             </div>
             </section>
 
+            <!-- Image Popup Modal -->
+            <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+                <div class="relative max-w-3xl w-full">
+                <button id="close-modal" class="absolute top-2 right-2 text-white text-3xl font-bold">&times;</button>
+                <img id="modal-image" src="" alt="Full Size" class="w-full h-auto rounded-lg shadow-lg">
+                </div>
+            </div>
+  
+
 
             <!-- Gallery Section -->
             <!-- Gallery Section -->
@@ -110,7 +119,38 @@
                 });
             </script>
             
-            
+            <script>
+                // Attach event delegation after DOM is loaded
+                document.addEventListener('DOMContentLoaded', () => {
+                  const modal = document.getElementById('image-modal');
+                  const modalImage = document.getElementById('modal-image');
+                  const closeModalBtn = document.getElementById('close-modal');
+              
+                  // Delegate click to image elements inside the gallery
+                  document.getElementById('gallery').addEventListener('click', (e) => {
+                    if (e.target.tagName === 'IMG') {
+                      modalImage.src = e.target.src;
+                      modal.classList.remove('hidden');
+                      modal.classList.add('flex');
+                    }
+                  });
+              
+                  // Close modal on button click or backdrop click
+                  closeModalBtn.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                  });
+              
+                  // Optional: click outside the image to close modal
+                  modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                      modal.classList.add('hidden');
+                      modal.classList.remove('flex');
+                    }
+                  });
+                });
+              </script>
+              
             
             
             <script type = "module">
