@@ -90,10 +90,10 @@ export async function fetchImages(selectedTag = null) {
                 // Generate HTML for each image
                 // We probably shouldn't be displaying the tags under each image
                 // It is good for testing but we should change before demo
+                // <p class="tags">${imageTags}</p>
                 const imageElement = `
                     <div class="gallery-item">
-                        <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md">
-                        <p class="tags">${imageTags}</p>
+                        <img src="${imageUrl}" alt="${imageName}" class="w-full mb-4 rounded-lg">
                     </div>`;
                 $('#gallery').append(imageElement); // Append to gallery section
             });

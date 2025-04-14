@@ -24,7 +24,7 @@ def getImages(wd, delay, maxImages):
         time.sleep(delay)
     
     # Change the URL here to scrape the different google image pages
-    url = "https://www.google.com/search?q=tattoo+fine+line+ideas&sca_esv=218665eea446f0ac&rlz=1C1RXMK_enUS1018US1018&udm=2&biw=1280&bih=593&sxsrf=AHTn8zoKofdCqqoBT--TyO4L7izXfee8vA%3A1743113517939&ei=Lc3lZ5SEOYKs5NoP3YyVgAY&oq=tattoo+fine+line+&gs_lp=EgNpbWciEXRhdHRvbyBmaW5lIGxpbmUgKgIIAjIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIKEAAYgAQYQxiKBUiRF1DmAVjmAXABeACQAQCYAUygAUyqAQExuAEByAEA-AEBmAICoAJawgIGEAAYBxgemAMAiAYBkgcBMqAHyQWyBwExuAdV&sclient=img"
+    url = "https://www.google.com/search?q=realism+tattoo&sca_esv=7eb4e2a0b2f23aa4&rlz=1C1RXMK_enUS1018US1018&udm=2&biw=848&bih=593&sxsrf=AHTn8zryNZWTGEQFuwvG8W-EJ9bw4GYMAw%3A1744164658826&ei=Mtf1Z5OaMpqt5NoP4uOukQg&ved=0ahUKEwiT-6zX78mMAxWaFlkFHeKxK4IQ4dUDCBE&uact=5&oq=realism+tattoo&gs_lp=EgNpbWciDnJlYWxpc20gdGF0dG9vMgcQIxgnGMkCMgYQABgHGB4yBRAAGIAEMgYQABgHGB4yBhAAGAcYHjIGEAAYBxgeMgYQABgHGB4yBhAAGAcYHjIFEAAYgAQyBhAAGAcYHkiPDVAAWIMKcAB4AJABAJgBYKABggKqAQEzuAEDyAEA-AEB-AECmAIDoAKiAsICCBAAGIAEGLEDmAMAkgcDMi4xoAe5E7IHAzIuMbgHogI&sclient=img"
     wd.get(url)
 
     imageURLS = set()
@@ -52,7 +52,6 @@ def getImages(wd, delay, maxImages):
         
         except:
                 continue
-        
         #//*[@id="Sva75c"]/div[2]/div[2]/div/div[2]/c-wiz/div/div[3]/div[1]/a/img[1]
         #//*[@id="Sva75c"]/div[2]/div[2]/div/div[2]/c-wiz/div/div[3]/div[1]/a/img[1]
         # find the XPath for the actual image tag
@@ -86,26 +85,31 @@ def downloadImage(fileName, URL, downloadPath):
     None. The function prints a success message if the image is downloaded and saved successfully,
     or an error message if an exception occurs during the download process.
     """
+    os.makedirs(downloadPath, exist_ok=True)
+
     for i, img in enumerate(URL):
         try:
             imageContent = requests.get(img).content
             imageFile = io.BytesIO(imageContent)
             image = Image.open(imageFile)
-            fileName2 = str(i) + fileName
+
+            fileName2 = f"{i}_{os.path.basename(fileName)}"
             filePath = os.path.join(downloadPath, fileName2)
+
+            print(f"Trying to save image at: {filePath}")
 
             with open(filePath, "wb") as f:
                 image.save(f, "JPEG")
 
             print(f"Image downloaded and saved as {filePath}")
-            
+
         except Exception as e:
             print(f"Error {e}")
 
 
 test = getImages(wd, 3, 10)
 
-downloadImage("fine-line.jpg", test, "InkLink\\webscrapping\\fine-line")
+downloadImage("realism.jpg", test, "./webscrapping/realism")
 
 
 #//*[@id="rso"]/div/div/div[1]/div/div/div[4]/div[2]

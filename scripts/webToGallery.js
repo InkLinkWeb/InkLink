@@ -49,11 +49,11 @@ async function uploadImage(filePath, imageName, metadata = {}) {
     console.log(`Uploaded ${imageName} and saved metadata`);
   }
     // Change this to your image folder path
-    const folderPath = "../webscrapping/testImage";
+    const folderPath = "../webscrapping/black-and-grey";
 
     fs.readdirSync(folderPath).forEach(async (file) => {
     const fullPath = path.join(folderPath, file);
     if (file.endsWith(".jpg") || file.endsWith(".png")) {
-        await uploadImage(fullPath, file, { tags: ["tattoo"] });
+        await uploadImage(fullPath, file, { tags: ["black and grey"] });
     }
     });
