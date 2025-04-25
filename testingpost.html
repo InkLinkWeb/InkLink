@@ -49,33 +49,22 @@
                   </div>
               </form>
           </div>
-
           <script type="module">
-            import { uploadImage } from "./scripts/ImageHandler.js";
+            import { uploadImage, handleFormSubmission } from './scripts/ImageHandler.js';
             document.getElementById('upload-form').addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent default form submission
-            const fileInput = document.getElementById('image-upload');
-            const captionInput = document.getElementById('caption');
-            const styleInput = document.getElementById('style'); // Get style input value
-            const file = fileInput.files[0];
-            const caption = captionInput.value.trim();
-            const style = styleInput.value.trim();
-            if (!file) {
-                alert('Please select an image to upload.');
-                return;
-            }
-            if (!caption) {
-                alert('Please enter a caption.');
-                return;
-            }
-            if (!style) {
-                alert('Please enter a tattoo style.');
-                return;
-            }
-            await uploadImage(file, caption, style); // Upload image
-            fileInput.value = ''; // Clear file input
-            captionInput.value = ''; // Clear caption input
-            styleInput.value = ''; // Clear style input
+                event.preventDefault();
+                const file = document.getElementById('image-upload').files[0];
+                const caption = document.getElementById('caption').value;
+                const style = document.getElementById('style').value;
+                try {
+                    await handleFormSubmission(file, caption, style);
+                    // Clear inputs on success
+                    document.getElementById('image-upload').value = '';
+                    document.getElementById('caption').value = '';
+                    document.getElementById('style').value = '';
+                } catch (error) {
+                    alert(error.message);
+                }
             });
         </script>
         <script type="module" src="./scripts/navbarHandler.js"></script>

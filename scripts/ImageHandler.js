@@ -32,6 +32,14 @@ export async function uploadImage(file, caption, style) {
         alert("You must be logged in to upload images.");
         return;
     }
+    const validTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+    const maxSize = 5 * 1024 * 1024;
+    if (!validTypes.includes(file.type)) {
+        throw new Error('Invalid file type.');
+    }
+    if (file.size > maxSize) {
+        throw new Error('File size exceeds 5MB.');
+    }
     const userId = user.uid;
     const timestamp = new Date().toISOString();
     const fileName = `${timestamp}_${file.name}`;
@@ -59,6 +67,16 @@ export async function uploadImage(file, caption, style) {
     }
 }
 
+export async function handleFormSubmission(file, caption, style) {
+    if (!file) throw new Error('Please select an image to upload.');
+    if (!caption || caption.trim() === '') throw new Error('Please enter a caption.');
+    if (caption.length > 200) throw new Error('Caption is too long. Please keep it under 200 characters.');
+    if (!style || style.trim() === '') throw new Error('Please enter a tattoo style.');
+    if (style.length > 50) throw new Error('Tattoo style is too long. Please keep it under 50 characters.');
+    
+    await uploadImage(file, caption.trim(), style.trim());
+}
+
 
 // Function to fetch images from Firestore with pagination
 export async function fetchImages(selectedTag = null) {
@@ -71,7 +89,7 @@ export async function fetchImages(selectedTag = null) {
     if (selectedTag) {
         q = query(imagesRef, where("tags", "array-contains", selectedTag), orderBy('createdAt', 'desc'), limit(batchSize));
     }
-    // Include pagination logic if lastImageLoaded exists
+    // Pagination logic
     if (lastImageLoaded) {
         q = query(q, startAfter(lastImageLoaded));
     }
@@ -88,12 +106,10 @@ export async function fetchImages(selectedTag = null) {
                 const imageName = data.name;
                 const imageTags = data.tags.join(', ');
                 // Generate HTML for each image
-                // We probably shouldn't be displaying the tags under each image
-                // It is good for testing but we should change before demo
-                // <p class="tags">${imageTags}</p>
                 const imageElement = `
                     <div class="gallery-item">
-                        <img src="${imageUrl}" alt="${imageName}" class="w-full mb-4 rounded-lg">
+                        <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md">
+                        <p class="tags">${imageTags}</p>
                     </div>`;
                 $('#gallery').append(imageElement); // Append to gallery section
             });
