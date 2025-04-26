@@ -36,14 +36,33 @@
             </section>
 
             <!-- Image Popup Modal -->
-            <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+            <!-- <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
                 <div class="relative max-w-3xl w-full">
-                <button id="close-modal" class="absolute top-2 right-2 text-white text-3xl font-bold">&times;</button>
-                <img id="modal-image" src="" alt="Full Size" class="w-full h-auto rounded-lg shadow-lg">
+                <button id="close-modal" class="absolute top-2 right-2 text-white text-3xl font-bold hover:cursor-pointer">&times;</button>
+                <div class="w-1/2 p-2 flex justify-center items-center">
+                    <img id="modal-image" src="" alt="Modal Image" class="max-h-[80vh] object-contain">
+                </div>
                 <p id="modal-caption" class="mt-2 text-white text-center"></p>
                 <p id="modal-tags" class="text-gray-400 text-center text-sm"></p>
                 </div>
-            </div>
+            </div> -->
+            <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+                <div class="bg-white rounded-lg p-4 flex max-w-4xl w-full">
+                  <!-- Image Section -->
+                  <div class="w-1/2 p-2 flex justify-center items-center">
+                    <img id="modal-image" src="" alt="Modal Image" class="max-h-[80vh] object-contain">
+                  </div>
+              
+                  <!-- Text Section -->
+                  <div class="w-1/2 p-4 flex flex-col justify-center">
+                    <h2 id="modal-caption" class="text-xl font-bold mb-4"></h2>
+                    <p id="modal-tags" class="text-gray-600"></p>
+                  </div>
+                </div>
+              
+                <!-- Close Button -->
+                <button id="close-modal" class="absolute top-4 right-4 text-white text-2xl">&times;</button>
+              </div>              
   
 
 
@@ -141,7 +160,7 @@
                         const tags = e.target.getAttribute('data-tags') || '';
                         console.log(tags)
                         modalCaption.textContent = caption;
-                        modalTags.textContent = tags;
+                        modalTags.textContent = `Style: ${tags}`;
                     }
                   });
               
