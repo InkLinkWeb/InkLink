@@ -158,7 +158,7 @@ export async function fetchImages(selectedTag = null) {
                 const data = doc.data();
                 const imageUrl = data.url;
                 const caption = data.caption || '';
-                const tags = data.tags ? data.tags.join(', ') : '';
+                const tags = data.tags.join(', ');
                 // Generate HTML for each image
                 const imageElement = `
                     <div class="gallery-item p-2">
