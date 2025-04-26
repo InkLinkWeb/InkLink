@@ -25,6 +25,7 @@ console.log('Firestore initialized:', db);
 let batchSize = 10;
 export let lastImageLoaded = null;
 
+
 // Function to upload an image
 export async function uploadImage(file, caption, style) {
     const user = auth.currentUser;
@@ -66,6 +67,7 @@ export async function uploadImage(file, caption, style) {
     }
 }
 
+
 export async function handleFormSubmission(file, caption, style) {
     if (!file) throw new Error('Please select an image to upload.');
     if (!caption || caption.trim() === '') throw new Error('Please enter a caption.');
@@ -76,53 +78,6 @@ export async function handleFormSubmission(file, caption, style) {
     await uploadImage(file, caption.trim(), style.trim());
 }
 
-
-// // Function to fetch images from Firestore with pagination
-// export async function fetchImages(selectedTag = null) {
-//     console.log("Fetching images with tag:", selectedTag);
-//     // Reference to Firestore collection
-//     const imagesRef = collection(db, 'scrapedImages');
-//     let q = query(imagesRef, orderBy('createdAt', 'desc'), limit(batchSize));
-
-//     // If a selected tag exists, filter images by the tag
-//     if (selectedTag) {
-//         q = query(imagesRef, where("tags", "array-contains", selectedTag), orderBy('createdAt', 'desc'), limit(batchSize));
-//     }
-//     // Pagination logic
-//     if (lastImageLoaded) {
-//         q = query(q, startAfter(lastImageLoaded));
-//     }
-//     try {
-//         // Fetch the images from Firestore based on the query
-//         const snapshot = await getDocs(q);
-//         if (!snapshot.empty) {
-//             // Update the lastImageLoaded for pagination
-//             lastImageLoaded = snapshot.docs[snapshot.docs.length - 1];
-//             // Loop through the snapshot and append the images to the gallery
-//             snapshot.forEach(doc => {
-//                 const data = doc.data();
-//                 const imageUrl = data.url;
-//                 const imageName = data.name;
-//                 const imageTags = data.tags.join(', ');
-//                 // Generate HTML for each image
-//                 const imageElement = `
-//                     <div class="gallery-item">
-//                         <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md">
-//                         <p class="tags">${imageTags}</p>
-//                     </div>`;
-//                 $('#gallery').append(imageElement); // Append to gallery section
-//             });
-//             // Show the "Load More" button if there are more images to load
-//             document.getElementById('load-more-btn').style.display = 'block';
-//         } else {
-//             console.log('No more images to load.');
-//             // Hide the "Load More" button if no more images are available
-//             document.getElementById('load-more-btn').style.display = 'none';
-//         }
-//     } catch (error) {
-//         console.error("Error fetching images: ", error);
-//     }
-// }
 
 export async function fetchImages(selectedTag = null) {
     console.log("Fetching images with tag:", selectedTag);
@@ -165,8 +120,6 @@ export async function fetchImages(selectedTag = null) {
                         data-caption="${caption}"
                         data-tag="${imageTags}">
                     </div>`;
-                        // <p class="caption">${caption}</p>
-                        // <p class="tags">${imageTags}</p>
                 $('#gallery').append(imageElement); // Append to gallery section
             });
             document.getElementById('load-more-btn').style.display = 'block';
@@ -179,30 +132,6 @@ export async function fetchImages(selectedTag = null) {
     }
 }
 
-// // Function to fetch unique tags from Firestore and populate the dropdown
-// export async function populateTagFilter() {
-//     const tagsSet = new Set();
-//     const imagesRef = collection(db, 'scrapedImages');
-//     const q = query(imagesRef);
-//     try {
-//         const snapshot = await getDocs(q);
-//         snapshot.forEach(doc => {
-//             const data = doc.data();
-//             if (Array.isArray(data.tags)) {
-//                 data.tags.forEach(tag => tagsSet.add(tag));
-//             }
-//         });
-//         const tagFilter = document.getElementById('tag-filter');
-//         tagsSet.forEach(tag => {
-//             const option = document.createElement('option');
-//             option.value = tag;
-//             option.textContent = tag;
-//             tagFilter.appendChild(option);
-//         });
-//     } catch (error) {
-//         console.error("Error fetching tags: ", error);
-//     }
-// }
 
 // Function to fetch unique tags from imagesIndex and populate the dropdown
 export async function populateTagFilter() {
