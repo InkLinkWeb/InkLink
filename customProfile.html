@@ -23,8 +23,7 @@
   </head>
 
   <body class="bg-[#F2F2F2] min-h-screen">
-
-    <nav id="navbar" class="hidden bg-[#181818] w-full sticky top-0 z-50"></nav>
+    <nav id="navbar" class="bg-[#181818] w-full sticky top-0 z-50">
       <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div class="relative flex h-16 items-center justify-between">
           <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -188,13 +187,11 @@
 
       // After 2 seconds, animate the welcome message away and show the profile page
       setTimeout(() => {
-        const navbar = document.getElementById("navbar");
         document.getElementById("welcome-container").classList.add("fade-out");
         setTimeout(() => {
           document.getElementById("welcome-container").classList.add("hidden");
           const profileContainer = document.getElementById("profile-container");
           profileContainer.classList.remove("hidden");
-          navbar.classList.remove("hidden");
 
           // Populate the profile page with the user's data
           onAuthStateChanged(auth, async (user) => {
