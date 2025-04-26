@@ -155,16 +155,17 @@ export async function fetchImages(selectedTag = null) {
             snapshot.forEach(doc => {
                 const data = doc.data();
                 const imageUrl = data.url;
+                const imageName = data.imageName;
                 const caption = data.caption || '';  // Default to an empty string if no caption
-                const tag = data.tags;
+                const imageTags = data.tags;
                 // Generate HTML for each image
                 const imageElement = `
-                    <div class="gallery-item p-2">
-                        <img src="${imageUrl}" alt="${caption}" class="w-full h-auto rounded-lg shadow-md">
-                        <p class="caption mt-1 text-sm text-gray-700">${caption}</p>
-                        <p class="tags text-xs text-gray-500">${tag}</p>  <!-- Fixed to display a single tag string -->
+                    <div class="gallery-item">
+                        <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md">
+                        <p class="caption">${caption}</p>
+                        <p class="tags">${imageTags}</p>
                     </div>`;
-                $('#gallery').append(imageElement);
+                $('#gallery').append(imageElement); // Append to gallery section
             });
             document.getElementById('load-more-btn').style.display = 'block';
         } else {
@@ -212,7 +213,9 @@ export async function populateTagFilter() {
             const data = doc.data();
             const tag = data.tags;
             if (tag) {
-                tagsSet.add(tag);
+                // Convert tag to lowercase to normalize the casing
+                const normalizedTag = tag.toLowerCase();
+                tagsSet.add(normalizedTag);
             }
         });
         const tagFilter = document.getElementById('tag-filter');
@@ -222,7 +225,8 @@ export async function populateTagFilter() {
         tagsSet.forEach(tag => {
             const option = document.createElement('option');
             option.value = tag;
-            option.textContent = tag;
+            // Capitalize the first letter of each tag for display purposes
+            option.textContent = tag.charAt(0).toUpperCase() + tag.slice(1);
             tagFilter.appendChild(option);
         });
     } catch (error) {
