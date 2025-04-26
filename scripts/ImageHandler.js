@@ -124,17 +124,15 @@ export async function handleFormSubmission(file, caption, style) {
 //     }
 // }
 
-// Function to fetch images from Firestore
 export async function fetchImages(selectedTag = null) {
     console.log("Fetching images with tag:", selectedTag);
-    // Reference to Firestore collection
     const imagesRef = collection(db, 'imagesIndex');
     let q;
     // If a selected tag exists, filter images by the tag
     if (selectedTag) {
         q = query(
             imagesRef,
-            where("tags", "array-contains", selectedTag),
+            where("tags", "==", selectedTag),
             orderBy('createdAt', 'desc'),
             limit(batchSize)
         );
@@ -157,14 +155,14 @@ export async function fetchImages(selectedTag = null) {
             snapshot.forEach(doc => {
                 const data = doc.data();
                 const imageUrl = data.url;
-                const caption = data.caption || '';
-                const tags = data.tags;
+                const caption = data.caption || '';  // Default to an empty string if no caption
+                const tag = data.tags;
                 // Generate HTML for each image
                 const imageElement = `
                     <div class="gallery-item p-2">
                         <img src="${imageUrl}" alt="${caption}" class="w-full h-auto rounded-lg shadow-md">
                         <p class="caption mt-1 text-sm text-gray-700">${caption}</p>
-                        <p class="tags text-xs text-gray-500">${tags}</p>
+                        <p class="tags text-xs text-gray-500">${tag}</p>  <!-- Fixed to display a single tag string -->
                     </div>`;
                 $('#gallery').append(imageElement);
             });
@@ -177,7 +175,6 @@ export async function fetchImages(selectedTag = null) {
         console.error("Error fetching images: ", error);
     }
 }
-
 
 // // Function to fetch unique tags from Firestore and populate the dropdown
 // export async function populateTagFilter() {
@@ -213,8 +210,9 @@ export async function populateTagFilter() {
         const snapshot = await getDocs(q);
         snapshot.forEach(doc => {
             const data = doc.data();
-            if (Array.isArray(data.tags)) {
-                data.tags.forEach(tag => tagsSet.add(tag));
+            const tag = data.tags;
+            if (tag) {
+                tagsSet.add(tag);
             }
         });
         const tagFilter = document.getElementById('tag-filter');
@@ -231,6 +229,7 @@ export async function populateTagFilter() {
         console.error("Error fetching tags: ", error);
     }
 }
+
 
 // Function to handle tag filter change
 export async function filterImagesByTag(event) {
