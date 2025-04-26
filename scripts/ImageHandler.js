@@ -161,10 +161,12 @@ export async function fetchImages(selectedTag = null) {
                 // Generate HTML for each image
                 const imageElement = `
                     <div class="gallery-item">
-                        <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md">
-                        <p class="caption">${caption}</p>
-                        <p class="tags">${imageTags}</p>
+                        <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md"
+                        data-caption="${caption}"
+                        data-tag="${imageTags}">
                     </div>`;
+                        // <p class="caption">${caption}</p>
+                        // <p class="tags">${imageTags}</p>
                 $('#gallery').append(imageElement); // Append to gallery section
             });
             document.getElementById('load-more-btn').style.display = 'block';
