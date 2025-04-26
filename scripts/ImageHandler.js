@@ -40,26 +40,25 @@ export async function uploadImage(file, caption, style) {
     if (file.size > maxSize) {
         throw new Error('File size exceeds 5MB.');
     }
-    const userId = user.uid;
-    const timestamp = new Date().toISOString();
-    const fileName = `${timestamp}_${file.name}`;
-    const storageRef = ref(storage, `uploads/${userId}/${fileName}`);
+    const userID = user.uid;
+    const fileName = `${file.name}`;
+    const storageRef = ref(storage, `uploads/${userID}/${fileName}`);
     try {
         // Upload file to Firebase Storage
         const snapshot = await uploadBytes(storageRef, file);
         console.log("File uploaded:", snapshot);
-        // Get download URL
         const downloadURL = await getDownloadURL(snapshot.ref);
-        // Define a reference for the document in the images subcollection of the user document
-        const imagesCollectionRef = collection(db, "users", userId, "images");
-        // Use setDoc to create the image document
-        await setDoc(doc(imagesCollectionRef, fileName), {
+        // Save metadata in imagesIndex collection
+        const imageDoc = {
+            userID: userID,
+            imageName: fileName,
+            url: downloadURL,
+            tags: [style.toLowerCase()],
             caption: caption,
-            style: style.toLowerCase(),
-            imageUrl: downloadURL,
-            timestamp: serverTimestamp()
-        });
-        console.log("Image metadata saved to Firestore with document ID:", fileName);
+            createdAt: serverTimestamp()
+        };
+        await setDoc(doc(db, "imagesIndex", fileName), imageDoc);
+        console.log("Image metadata saved to imagesIndex.");
         alert("Image uploaded successfully!");
     } catch (error) {
         console.error("Upload error:", error.message);
@@ -78,16 +77,73 @@ export async function handleFormSubmission(file, caption, style) {
 }
 
 
-// Function to fetch images from Firestore with pagination
+// // Function to fetch images from Firestore with pagination
+// export async function fetchImages(selectedTag = null) {
+//     console.log("Fetching images with tag:", selectedTag);
+//     // Reference to Firestore collection
+//     const imagesRef = collection(db, 'scrapedImages');
+//     let q = query(imagesRef, orderBy('createdAt', 'desc'), limit(batchSize));
+
+//     // If a selected tag exists, filter images by the tag
+//     if (selectedTag) {
+//         q = query(imagesRef, where("tags", "array-contains", selectedTag), orderBy('createdAt', 'desc'), limit(batchSize));
+//     }
+//     // Pagination logic
+//     if (lastImageLoaded) {
+//         q = query(q, startAfter(lastImageLoaded));
+//     }
+//     try {
+//         // Fetch the images from Firestore based on the query
+//         const snapshot = await getDocs(q);
+//         if (!snapshot.empty) {
+//             // Update the lastImageLoaded for pagination
+//             lastImageLoaded = snapshot.docs[snapshot.docs.length - 1];
+//             // Loop through the snapshot and append the images to the gallery
+//             snapshot.forEach(doc => {
+//                 const data = doc.data();
+//                 const imageUrl = data.url;
+//                 const imageName = data.name;
+//                 const imageTags = data.tags.join(', ');
+//                 // Generate HTML for each image
+//                 const imageElement = `
+//                     <div class="gallery-item">
+//                         <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md">
+//                         <p class="tags">${imageTags}</p>
+//                     </div>`;
+//                 $('#gallery').append(imageElement); // Append to gallery section
+//             });
+//             // Show the "Load More" button if there are more images to load
+//             document.getElementById('load-more-btn').style.display = 'block';
+//         } else {
+//             console.log('No more images to load.');
+//             // Hide the "Load More" button if no more images are available
+//             document.getElementById('load-more-btn').style.display = 'none';
+//         }
+//     } catch (error) {
+//         console.error("Error fetching images: ", error);
+//     }
+// }
+
+// Function to fetch images from Firestore
 export async function fetchImages(selectedTag = null) {
     console.log("Fetching images with tag:", selectedTag);
     // Reference to Firestore collection
-    const imagesRef = collection(db, 'scrapedImages');
-    let q = query(imagesRef, orderBy('createdAt', 'desc'), limit(batchSize));
-
+    const imagesRef = collection(db, 'imagesIndex');
+    let q;
     // If a selected tag exists, filter images by the tag
     if (selectedTag) {
-        q = query(imagesRef, where("tags", "array-contains", selectedTag), orderBy('createdAt', 'desc'), limit(batchSize));
+        q = query(
+            imagesRef,
+            where("tags", "array-contains", selectedTag),
+            orderBy('createdAt', 'desc'),
+            limit(batchSize)
+        );
+    } else {
+        q = query(
+            imagesRef,
+            orderBy('createdAt', 'desc'),
+            limit(batchSize)
+        );
     }
     // Pagination logic
     if (lastImageLoaded) {
@@ -97,27 +153,24 @@ export async function fetchImages(selectedTag = null) {
         // Fetch the images from Firestore based on the query
         const snapshot = await getDocs(q);
         if (!snapshot.empty) {
-            // Update the lastImageLoaded for pagination
             lastImageLoaded = snapshot.docs[snapshot.docs.length - 1];
-            // Loop through the snapshot and append the images to the gallery
             snapshot.forEach(doc => {
                 const data = doc.data();
                 const imageUrl = data.url;
-                const imageName = data.name;
-                const imageTags = data.tags.join(', ');
+                const caption = data.caption || '';
+                const tags = data.tags ? data.tags.join(', ') : '';
                 // Generate HTML for each image
                 const imageElement = `
-                    <div class="gallery-item">
-                        <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md">
-                        <p class="tags">${imageTags}</p>
+                    <div class="gallery-item p-2">
+                        <img src="${imageUrl}" alt="${caption}" class="w-full h-auto rounded-lg shadow-md">
+                        <p class="caption mt-1 text-sm text-gray-700">${caption}</p>
+                        <p class="tags text-xs text-gray-500">${tags}</p>
                     </div>`;
-                $('#gallery').append(imageElement); // Append to gallery section
+                $('#gallery').append(imageElement);
             });
-            // Show the "Load More" button if there are more images to load
             document.getElementById('load-more-btn').style.display = 'block';
         } else {
             console.log('No more images to load.');
-            // Hide the "Load More" button if no more images are available
             document.getElementById('load-more-btn').style.display = 'none';
         }
     } catch (error) {
@@ -126,10 +179,35 @@ export async function fetchImages(selectedTag = null) {
 }
 
 
-// Function to fetch unique tags from Firestore and populate the dropdown
+// // Function to fetch unique tags from Firestore and populate the dropdown
+// export async function populateTagFilter() {
+//     const tagsSet = new Set();
+//     const imagesRef = collection(db, 'scrapedImages');
+//     const q = query(imagesRef);
+//     try {
+//         const snapshot = await getDocs(q);
+//         snapshot.forEach(doc => {
+//             const data = doc.data();
+//             if (Array.isArray(data.tags)) {
+//                 data.tags.forEach(tag => tagsSet.add(tag));
+//             }
+//         });
+//         const tagFilter = document.getElementById('tag-filter');
+//         tagsSet.forEach(tag => {
+//             const option = document.createElement('option');
+//             option.value = tag;
+//             option.textContent = tag;
+//             tagFilter.appendChild(option);
+//         });
+//     } catch (error) {
+//         console.error("Error fetching tags: ", error);
+//     }
+// }
+
+// Function to fetch unique tags from imagesIndex and populate the dropdown
 export async function populateTagFilter() {
     const tagsSet = new Set();
-    const imagesRef = collection(db, 'scrapedImages');
+    const imagesRef = collection(db, 'imagesIndex');
     const q = query(imagesRef);
     try {
         const snapshot = await getDocs(q);
@@ -140,6 +218,9 @@ export async function populateTagFilter() {
             }
         });
         const tagFilter = document.getElementById('tag-filter');
+        // Clear any existing options (except the first "All" option)
+        tagFilter.length = 1;
+        // Populate new unique tags
         tagsSet.forEach(tag => {
             const option = document.createElement('option');
             option.value = tag;
@@ -150,7 +231,6 @@ export async function populateTagFilter() {
         console.error("Error fetching tags: ", error);
     }
 }
-
 
 // Function to handle tag filter change
 export async function filterImagesByTag(event) {
