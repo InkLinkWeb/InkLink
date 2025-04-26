@@ -161,7 +161,7 @@ export async function fetchImages(selectedTag = null) {
                 // Generate HTML for each image
                 const imageElement = `
                     <div class="gallery-item">
-                        <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md"
+                        <img src="${imageUrl}" alt="${imageName}" class="w-full h-auto rounded-lg shadow-md padding-2 py-2"
                         data-caption="${caption}"
                         data-tag="${imageTags}">
                     </div>`;
