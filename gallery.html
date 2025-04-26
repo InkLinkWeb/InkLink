@@ -22,7 +22,7 @@
 
         <div class="h-screen w-full snap-y snap-mandatory">
             <!-- Hero Section -->
-            <section class="relative w-full h-screen bg-cover bg-center flex items-center justify-center text-white snap-start" 
+            <section id="login-section" class="relative w-full h-screen bg-cover bg-center flex items-center justify-center text-white snap-start" 
                 style="background-image: url('img/pexels-photo-2183131.jpeg');">
             <div class="absolute inset-0 bg-black bg-opacity-50"></div> <!-- Dark overlay -->
             <div class="relative text-center">
@@ -154,19 +154,17 @@
             
             
             <script type = "module">
-              import { 
-                  checkAuth, 
-                  logout 
-              } from "./scripts/AccountHandler.js"; // Importing the checkAuth and logout functions
-  
+              import { checkAuth, logout } from "./scripts/AccountHandler.js"; // Importing the checkAuth and logout functions
               // Check if the user is authenticated
               checkAuth((user) => {
-                  if (!user) {
-                  // Redirect to login page if not authenticated
-                      console.log('User not authenticated, redirecting to login page.');
-                      window.location.href = './index.html'; // Redirect to login page
-                      }
-              });
+                if (user) {
+                // Redirect to login page if not authenticated
+                    const loginSection = document.getElementById('login-section');
+                    if (loginSection) {
+                        loginSection.style.display = 'none';
+                    }
+              }
+            });
           </script>
           <script type="module" src="./scripts/navbarHandler.js"></script>
     </body>
