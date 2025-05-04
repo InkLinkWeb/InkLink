@@ -7,19 +7,9 @@
     <title>Ink Link - Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
-
-    <!-- Firebase v8 -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-    <!-- Day.js + Relative Time Plugin -->
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/relativeTime.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/zh-cn.js"></script>
-
-    <!-- Emoji Picker (vanilla-emoji-picker) -->
     <script src="https://cdn.jsdelivr.net/npm/vanilla-emoji-picker@1.1.4/dist/vanillaEmojiPicker.min.js"></script>
 </head>
 
@@ -74,7 +64,6 @@
         </div>
     </div>
 
-    <!-- Profile Popup -->
     <div id="profile-popup" class="hidden fixed top-1/3 left-1/3 bg-white p-6 shadow-lg rounded-lg w-80">
         <h2 id="profile-name" class="text-lg font-semibold"></h2>
         <div class="mt-4 flex justify-between">
@@ -83,44 +72,64 @@
         <button onclick="closeProfile()" class="mt-4 px-4 py-2 bg-gray-400 text-white rounded w-full">Close</button>
     </div>
 
-    <script>
+    <!-- Firebase v9 - Modular -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, query, orderBy, getDocs, startAfter, onSnapshot, addDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getDatabase, ref, push, onDisconnect, set, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
         const firebaseConfig = {
-            apiKey: "AIzaSyDHIBvFidkBWcLd9Ku8WcrErZPPne-N66Q",
-            authDomain: "wibesite-7a1dc.firebaseapp.com",
-            projectId: "wibesite-7a1dc",
-            storageBucket: "wibesite-7a1dc.appspot.com",
-            messagingSenderId: "181803988357",
-            appId: "1:181803988357:web:2a0e38ed629ab325a040ec"
+            apiKey: "AIzaSyCJJatBLi5cR_GRhbsHQ5SdzlAW3bOswzU",
+            authDomain: "inklinkweb.firebaseapp.com",
+            projectId: "inklinkweb",
+            storageBucket: "inklinkweb.firebasestorage.app",
+            messagingSenderId: "932046606000",
+            appId: "1:932046606000:web:bae7db8b2929df69413575"
         };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const rtdb = firebase.database();
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const rtdb = getDatabase(app);
 
         let currentUser = null;
         let currentChatId = "public";
-        let unsubscribe = null;
         let oldestLoadedDoc = null;
+        let unsubscribe = null;
 
         dayjs.extend(dayjs_plugin_relativeTime);
         dayjs.locale('zh-cn');
 
-        auth.onAuthStateChanged(user => {
+        onAuthStateChanged(auth, user => {
             if (user) {
+                console.log("✅ User authenticated:", user.email);
                 currentUser = user;
                 setupPresence();
                 openChat("public", "Public Chat");
             } else {
-                window.location.href = "login.html";
+                console.log("⚠️ No user yet, will retry after short delay...");
+                // 延迟 1 秒再检查一次（让 Firebase 状态有时间加载）
+                setTimeout(() => {
+                    if (!auth.currentUser) {
+                        window.location.href = "index.html";
+                    } else {
+                        console.log("✅ Auth recovered on delay");
+                        currentUser = auth.currentUser;
+                        setupPresence();
+                        openChat("public", "Public Chat");
+                    }
+                }, 1000); // 可调整为 1500ms
             }
         });
 
+
         function setupPresence() {
-            const ref = rtdb.ref("presence/public").push();
-            ref.onDisconnect().remove();
-            ref.set(true);
-            rtdb.ref("presence/public").on("value", snap => {
-                document.getElementById("onlineCount").textContent = `在线人数: ${snap.numChildren()}`;
+            const presenceRef = push(ref(rtdb, "presence/public"));
+            onDisconnect(presenceRef).remove();
+            set(presenceRef, true);
+            onValue(ref(rtdb, "presence/public"), snap => {
+                document.getElementById("onlineCount").textContent = `在线人数: ${snap.size || snap.numChildren()}`;
             });
         }
 
@@ -143,63 +152,55 @@
             document.getElementById("chat-box").appendChild(wrapper);
         }
 
-        function openChat(chatId, title) {
+        async function openChat(chatId, title) {
             currentChatId = chatId;
             document.getElementById("chat-title").innerText = title;
             document.getElementById("chat-box").innerHTML = "";
             if (unsubscribe) unsubscribe();
-            const messagesRef = db.collection("chats").doc(chatId).collection("messages").orderBy("createdAt", "desc").limit(20);
-            messagesRef.get().then(snapshot => {
-                const docs = snapshot.docs.reverse();
-                docs.forEach(doc => renderMessage(doc.data()));
-                oldestLoadedDoc = docs[0];
+
+            const chatRef = collection(db, "chats", chatId, "messages");
+            const q = query(chatRef, orderBy("createdAt", "desc"), limit(20));
+            const snapshot = await getDocs(q);
+            const docs = snapshot.docs.reverse();
+            docs.forEach(doc => renderMessage(doc.data()));
+            oldestLoadedDoc = docs[0];
+
+            const liveQ = query(chatRef, orderBy("createdAt", "asc"), startAfter(new Date()));
+            unsubscribe = onSnapshot(liveQ, snapshot => {
+                snapshot.forEach(doc => renderMessage(doc.data()));
             });
-            unsubscribe = db.collection("chats").doc(chatId).collection("messages")
-                .orderBy("createdAt", "asc")
-                .startAfter(firebase.firestore.Timestamp.now())
-                .onSnapshot(snapshot => {
-                    snapshot.forEach(doc => renderMessage(doc.data()));
-                });
         }
 
-        document.getElementById("loadMoreBtn").onclick = () => {
+        document.getElementById("loadMoreBtn").onclick = async () => {
             if (!oldestLoadedDoc) return;
-            db.collection("chats").doc(currentChatId).collection("messages")
-                .orderBy("createdAt", "desc")
-                .startAfter(oldestLoadedDoc)
-                .limit(20)
-                .get()
-                .then(snapshot => {
-                    if (!snapshot.empty) {
-                        oldestLoadedDoc = snapshot.docs[snapshot.docs.length - 1];
-                        snapshot.docs.reverse().forEach(doc => renderMessage(doc.data()));
-                    } else {
-                        document.getElementById("loadMoreBtn").disabled = true;
-                        document.getElementById("loadMoreBtn").textContent = '没有更多消息';
-                    }
-                });
+            const chatRef = collection(db, "chats", currentChatId, "messages");
+            const q = query(chatRef, orderBy("createdAt", "desc"), startAfter(oldestLoadedDoc), limit(20));
+            const snapshot = await getDocs(q);
+            if (!snapshot.empty) {
+                oldestLoadedDoc = snapshot.docs[snapshot.docs.length - 1];
+                snapshot.docs.reverse().forEach(doc => renderMessage(doc.data()));
+            } else {
+                document.getElementById("loadMoreBtn").disabled = true;
+                document.getElementById("loadMoreBtn").textContent = '没有更多消息';
+            }
         };
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById("message-input");
             const message = input.value.trim();
             if (!message || !currentUser) return;
-            const chatRef = db.collection("chats").doc(currentChatId);
-            chatRef.set({}, { merge: true }).then(() => {
-                return chatRef.collection("messages").add({
-                    text: message,
-                    userEmail: currentUser.email,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            }).then(() => {
-                input.value = "";
-            }).catch(error => {
-                alert("发送失败：" + error.message);
+            const chatRef = doc(db, "chats", currentChatId);
+            await setDoc(chatRef, {}, { merge: true });
+            await addDoc(collection(chatRef, "messages"), {
+                text: message,
+                userEmail: currentUser.email,
+                createdAt: serverTimestamp()
             });
+            input.value = "";
         }
 
         function logout() {
-            auth.signOut().then(() => window.location.href = "login.html");
+            signOut(auth).then(() => window.location.href = "index.html");
         }
 
         function closeProfile() {
